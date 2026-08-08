@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.example.compose.ui.screens.NavigationListScreen
 import com.example.featurelist.ListRoute
 import com.example.presentation.featureslist.FeatureListScreen
 
@@ -11,6 +12,6 @@ import com.example.presentation.featureslist.FeatureListScreen
 @Composable
 fun EntryProviderScope<NavKey>.ListRoutes(backStack: NavBackStack<NavKey>) {
     entry<ListRoute>{
-        FeatureListScreen{ navKey -> backStack.add(navKey) }
+        NavigationListScreen{ navKey -> backStack.add(navKey) }
     }
 }

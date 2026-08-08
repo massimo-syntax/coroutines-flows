@@ -37,6 +37,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
+    implementation("androidx.compose.material:material-icons-extended")
+
+
     // async image
     implementation("io.coil-kt:coil-compose:2.7.0")
 
@@ -47,4 +50,6 @@ dependencies {
     implementation(project(":feature:myfeature:api"))
     implementation(project(":feature:coroutines:api"))
     implementation(project(":feature:flows:api"))
+
+    implementation(project(":core:designsystem"))
 }
