@@ -7,52 +7,57 @@ import com.example.flows.api.VeryFastFlow
 import com.example.flows.api.VerySimpleFLow
 
 
-sealed interface FeatureItem
-
+// define a list of "Feature Items"
+// to display them in the lazy list
+// EVERY ITEM NAVIGATES TO A DIFFERENT SCREEN
+// so EVERY item has also a unique NavKey
+// that is used for navigation
+// the NavEntry provider in :featurelist:impl module passes a callback
+// for the back stack, being completely different screens
+// is needed to give the NavKey as parameter in the onClick of every list item.
+// Important:
+// ... for every job offer I can differ the architecture of the app as required.
 enum class SelectedCategory{
     Coroutines,
     Flows,
     All
 }
 
-data class ItemCoroutine(
-    val title: String,
-    val subtitle: String= "",
-    val description: String = "",
-    val imageUrl: String = "",
-    val type: SelectedCategory = SelectedCategory.Coroutines,
-    val navKey: NavKey
-) : FeatureItem
 
-data class ItemFlow(
-    val title: String,
-    val subtitle: String= "",
-    val description: String = "",
-    val imageUrl: String = "",
-    val type: SelectedCategory = SelectedCategory.Flows,
-    val navKey: NavKey
-) : FeatureItem
 
-val navigateableCoroutineItems = listOf<ItemCoroutine>(
+data class FeatureItem(
+     val title: String,
+     val subtitle: String= "",
+     val description: String = "",
+     val imageUrl: String = "",
+     val tags: List<String> = emptyList(),
+     val type: SelectedCategory,
+     val navKey: NavKey
+)
+val navigateableItems = listOf(
+
     // coroutines
-    ItemCoroutine(
+    FeatureItem(
+        type = SelectedCategory.Coroutines,
         title = "Simple coroutine",
         navKey = VerySimpleCoroutine
     ),
-    ItemCoroutine(
+    FeatureItem(
+        type = SelectedCategory.Coroutines,
         title = "Complicated Coroutine",
         navKey = VeryComplicatedCoroutine
     ),
-)
 
-val navigateableFlowItems = listOf<ItemFlow>(
     // flows
-    ItemFlow(
+    FeatureItem(
+        type = SelectedCategory.Flows,
         title = "Simple Flow",
         navKey = VerySimpleFLow
     ),
-    ItemFlow(
+    FeatureItem(
+        type = SelectedCategory.Flows,
         title = "Simple Flow",
         navKey = VeryFastFlow
     )
 )
+

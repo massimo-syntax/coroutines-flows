@@ -35,11 +35,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation("androidx.compose.material:material-icons-extended")
 
-
+    //  = viewModel()
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
     // async image
     implementation("io.coil-kt:coil-compose:2.7.0")
 

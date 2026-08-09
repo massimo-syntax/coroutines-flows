@@ -6,7 +6,6 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.example.compose.ui.screens.NavigationListScreen
 import com.example.featurelist.ListRoute
-import com.example.presentation.featureslist.FeatureListScreen
 
 
 @Composable

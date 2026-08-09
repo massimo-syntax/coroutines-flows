@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +30,7 @@ import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,25 +45,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import coil.compose.AsyncImage
-import com.example.compose.ui.screens.SelectedCategory
-import com.example.feature.coroutines.api.VerySimpleCoroutine
+import com.example.featurelist.ui.viewmodel.UiState
 
 @Composable
 fun NavigationLazyColumn(
-    selectedCategory: SelectedCategory = SelectedCategory.All,
     navigateTo: (navKey: NavKey) -> Unit,
-    searchQuery: String = ""
+    listState: UiState
 ) {
+    // for now category is selected, the list is already filtered in the viewmodel
+    // so the check is enough if notEmpty()
+    val coroutinesItems = listState.itemsList.filter { it.type == SelectedCategory.Coroutines }
+    val flowItems = listState.itemsList.filter { it.type == SelectedCategory.Flows }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // SECTION 1: COROUTINES
-        if (
-            selectedCategory == SelectedCategory.All ||
-            selectedCategory == SelectedCategory.Coroutines
-        ) {
+        if (coroutinesItems.isNotEmpty()) {
             stickyHeader {
                 SectionHeader(
                     title = "Coroutines",
@@ -74,12 +73,7 @@ fun NavigationLazyColumn(
             }
 
             items(
-                items = navigateableCoroutineItems.filter {
-                    it.title.contains(searchQuery, ignoreCase = true)
-                            || it.description.contains(searchQuery, ignoreCase = true)
-                            || it.subtitle.contains(searchQuery, ignoreCase = true)
-
-                },
+                items = coroutinesItems,
                 key = { it.hashCode() }
             ) {
                 FancyListItem(
@@ -95,10 +89,7 @@ fun NavigationLazyColumn(
         }
 
         // SECTION 2: FLOWS
-        if (
-            selectedCategory == SelectedCategory.All ||
-            selectedCategory == SelectedCategory.Coroutines
-        ) {
+        if (flowItems.isNotEmpty()) {
             stickyHeader {
                 SectionHeader(
                     title = "Flows",
@@ -109,12 +100,7 @@ fun NavigationLazyColumn(
             }
 
             items(
-                items = navigateableFlowItems.filter {
-                    it.title.contains(searchQuery, ignoreCase = true)
-                            || it.description.contains(searchQuery, ignoreCase = true)
-                            || it.subtitle.contains(searchQuery, ignoreCase = true)
-
-                },
+                items = flowItems,
                 key = { it.hashCode() }
             ) {
                 FancyListItem(
