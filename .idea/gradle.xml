@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/navigation" />
+            <option value="$PROJECT_DIR$/core/preferences" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/feature" />
@@ -29,6 +30,10 @@
             <option value="$PROJECT_DIR$/feature/myfeature" />
             <option value="$PROJECT_DIR$/feature/myfeature/api" />
             <option value="$PROJECT_DIR$/feature/myfeature/impl" />
+            <option value="$PROJECT_DIR$/feature/user-settings" />
+            <option value="$PROJECT_DIR$/feature/user-settings/api" />
+            <option value="$PROJECT_DIR$/feature/user-settings/impl" />
+            <option value="$PROJECT_DIR$/feature/user-settings/ui" />
             <option value="$PROJECT_DIR$/presentation" />
           </set>
         </option>

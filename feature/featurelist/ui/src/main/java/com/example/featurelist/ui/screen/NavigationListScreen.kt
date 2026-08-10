@@ -33,8 +33,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun NavigationListScreen(
     viewModel: ListScreenViewModel = viewModel(),
-    onNavigateToProfile: () -> Unit = {},
-    onNavigateToSettings: () -> Unit = {},
+    onNavigateToProfile: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     navigateToShowcaseScreen: (navKey: NavKey) -> Unit,
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

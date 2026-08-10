@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.feature.coroutines.impl.CoroutinesRoutes
 import com.example.feature.flows.impl.FlowsRoutes
+import com.example.feature.usersettings.impl.UserSettingsRoutes
 import com.example.featurelist.ListRoute
 import com.example.featurelist.impl.ListRoutes
 import com.example.myfeature.impl.MyFeatureRoutes
@@ -24,6 +25,7 @@ fun Nav(){
             MyFeatureRoutes(backStack)
             CoroutinesRoutes(backStack)
             FlowsRoutes(backStack)
+            UserSettingsRoutes(backStack)
         }
     )
 

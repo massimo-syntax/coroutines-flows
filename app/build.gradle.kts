@@ -95,5 +95,8 @@ dependencies {
     // Screens
     implementation(project(":presentation"))
 
+    // Theme datasource
+    implementation(project(":core:preferences"))
+
 
 }

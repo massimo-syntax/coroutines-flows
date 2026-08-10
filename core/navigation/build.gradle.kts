@@ -44,6 +44,9 @@ dependencies {
     implementation(project(":feature:flows:impl"))
     // featre coroutines
     implementation(project(":feature:coroutines:impl"))
+    // feature user-settings
+    implementation(project(":feature:user-settings:impl"))
+
 
 
 //    // navigation 3

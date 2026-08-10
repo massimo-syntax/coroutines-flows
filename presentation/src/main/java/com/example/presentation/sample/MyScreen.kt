@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.coroutinesflows.presentation.flows.uistate.MyUIState
-import com.example.coroutinesflows.presentation.flows.viewmodel.MyViewmodel
 import com.example.domain.model.MyData
+import com.example.presentation.sample.MyViewmodel
 
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.coroutinesflows.presentation.flows.viewmodel
+package com.example.presentation.sample
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

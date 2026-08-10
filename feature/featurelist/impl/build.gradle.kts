@@ -32,5 +32,7 @@ dependencies {
     implementation(project(":feature:featurelist:api"))
     // particular navigation for this usecase
     implementation(project(":feature:featurelist:ui"))
+    // profile and settings routes
+    implementation(project(":feature:user-settings:api"))
 
 }
