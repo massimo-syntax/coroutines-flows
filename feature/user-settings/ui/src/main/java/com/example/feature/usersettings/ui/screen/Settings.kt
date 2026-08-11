@@ -4,8 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -45,10 +43,8 @@ fun SettingsScreen() {
 
 
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -64,8 +60,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.coroutinesflows.designsystem.theme.AuroraTealOnSurface
+import com.example.coroutinesflows.designsystem.theme.AuroraTealPrimary
+import com.example.coroutinesflows.designsystem.theme.AuroraTealSecondary
+import com.example.coroutinesflows.designsystem.theme.AuroraTealSurface
+import com.example.coroutinesflows.designsystem.theme.AuroraTealTertiary
+import com.example.coroutinesflows.designsystem.theme.CyberVioletOnSurface
+import com.example.coroutinesflows.designsystem.theme.CyberVioletPrimary
+import com.example.coroutinesflows.designsystem.theme.CyberVioletSecondary
+import com.example.coroutinesflows.designsystem.theme.CyberVioletSurface
+import com.example.coroutinesflows.designsystem.theme.CyberVioletTertiary
+import com.example.coroutinesflows.designsystem.theme.EspressoGoldOnSurface
+import com.example.coroutinesflows.designsystem.theme.EspressoGoldPrimary
+import com.example.coroutinesflows.designsystem.theme.EspressoGoldSecondary
+import com.example.coroutinesflows.designsystem.theme.EspressoGoldSurface
+import com.example.coroutinesflows.designsystem.theme.EspressoGoldTertiary
+import com.example.coroutinesflows.designsystem.theme.NordicSapphireOnSurface
+import com.example.coroutinesflows.designsystem.theme.NordicSapphirePrimary
+import com.example.coroutinesflows.designsystem.theme.NordicSapphireSecondary
+import com.example.coroutinesflows.designsystem.theme.NordicSapphireSurface
+import com.example.coroutinesflows.designsystem.theme.NordicSapphireTertiary
+import com.example.coroutinesflows.designsystem.theme.SunsetCoralOnSurface
+import com.example.coroutinesflows.designsystem.theme.SunsetCoralPrimary
+import com.example.coroutinesflows.designsystem.theme.SunsetCoralSecondary
+import com.example.coroutinesflows.designsystem.theme.SunsetCoralSurface
+import com.example.coroutinesflows.designsystem.theme.SunsetCoralTertiary
+import com.example.coroutinesflows.designsystem.theme.TokyoCyanOnSurface
+import com.example.coroutinesflows.designsystem.theme.TokyoCyanPrimary
+import com.example.coroutinesflows.designsystem.theme.TokyoCyanSecondary
+import com.example.coroutinesflows.designsystem.theme.TokyoCyanSurface
+import com.example.coroutinesflows.designsystem.theme.TokyoCyanTertiary
+import com.example.designsystem.theme.Shapes
 import kotlinx.coroutines.launch
 
 /**
@@ -75,31 +103,37 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    currentTheme: AppTheme = AppTheme.SYSTEM,
+    //`AppState.currentTheme`: AppTheme = AppTheme.SYSTEM,
     onThemeSelected: (AppTheme) -> Unit = {},
-    dynamicColorEnabled: Boolean = false,
-    onDynamicColorToggle: (Boolean) -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
+
+    val appState = LocalAppState.current
+
     var notificationsEnabled by remember { mutableStateOf(true) }
     var hapticsEnabled by remember { mutableStateOf(true) }
-    var soundVolume by remember { mutableFloatStateOf(0.75f) }
-    var isAmoledDark by remember { mutableStateOf(false) }
-    var selectedCornerStyle by remember { mutableStateOf("Semi-Rounded") }
+
+    var selectedCornerStyle by remember { mutableStateOf(Shapes.small) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    val shape = Shapes.small
     // Corner shape definition based on selected style
+    /*
     val cardShape = when (selectedCornerStyle) {
-        "Sharp" -> RoundedCornerShape(2.dp)
+        "Sharp" -> RoundedCornerShape(8.dp)
         "Rounded" -> RoundedCornerShape(24.dp)
-        else -> RoundedCornerShape(12.dp)
+        else -> RoundedCornerShape(16.dp)
     }
+
+     */
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
+
+            // APP BAR
+
             TopAppBar(
                 title = {
                     Row(
@@ -128,7 +162,7 @@ fun SettingsScreen(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = currentTheme.name,
+                                text = appState.currentTheme.name,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -150,11 +184,11 @@ fun SettingsScreen(
                 )
             )
         },
-        containerColor = if (isAmoledDark && currentTheme.isDark) Color.Black else MaterialTheme.colorScheme.background,
+        containerColor =MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground
     ) { paddingValues ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
@@ -214,21 +248,22 @@ fun SettingsScreen(
                             modifier = Modifier.size(16.dp)
                         )
                         Text(
-                            text = "6 THEME PALETTES (3 LIGHT & 3 DARK)",
+                            text = "Select theme",
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
+                    Spacer(Modifier.width(8.dp))
                     AssistChip(
                         onClick = {},
-                        label = { Text(currentTheme.name, style = MaterialTheme.typography.labelSmall) },
+                        label = { Text(appState.currentTheme.displayName, style = MaterialTheme.typography.labelSmall) },
                         colors = AssistChipDefaults.assistChipColors(
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             labelColor = MaterialTheme.colorScheme.onSecondaryContainer
                         ),
                         border = AssistChipDefaults.assistChipBorder(enabled = true, borderColor = MaterialTheme.colorScheme.outlineVariant),
-                        shape = cardShape
+                        shape = selectedCornerStyle,
                     )
                 }
 
@@ -254,16 +289,19 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    AppTheme.values().filter { !it.isDark }.forEach { theme ->
+                    AppTheme.entries.filter { !it.isDark }.forEach { theme ->
+                        // skip system
+                        if(theme == AppTheme.SYSTEM) return@forEach
                         Box(modifier = Modifier.weight(1f)) {
                             ThemePaletteCard(
                                 theme = theme,
-                                isSelected = theme == currentTheme,
-                                cornerShape = cardShape,
+                                isSelected = theme == appState.currentTheme,
+                                cornerShape = selectedCornerStyle,
                                 onClick = {
-                                    onThemeSelected(theme)
+                                    appState.setTheme(theme)
+                                    //onThemeSelected(theme)
                                     scope.launch {
-                                        snackbarHostState.showSnackbar("Switched to Light Theme: ${theme.name}")
+                                        //snackbarHostState.showSnackbar("Switched to Light Theme: ${theme.name}")
                                     }
                                 }
                             )
@@ -294,16 +332,17 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    AppTheme.values().filter { it.isDark }.forEach { theme ->
+                    AppTheme.entries.filter { it.isDark }.forEach { theme ->
                         Box(modifier = Modifier.weight(1f)) {
                             ThemePaletteCard(
                                 theme = theme,
-                                isSelected = theme == currentTheme,
-                                cornerShape = cardShape,
+                                isSelected = theme == appState.currentTheme,
+                                cornerShape = selectedCornerStyle,
                                 onClick = {
-                                    onThemeSelected(theme)
+                                    appState.setTheme(theme)
+//                                    onThemeSelected(theme)
                                     scope.launch {
-                                        snackbarHostState.showSnackbar("Switched to Dark Theme: ${theme.name}")
+                                        //snackbarHostState.showSnackbar("Switched to Dark Theme: ${theme.name}")
                                     }
                                 }
                             )
@@ -313,9 +352,9 @@ fun SettingsScreen(
             }
 
             // SECTION 2: Material 3 Customization
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -337,7 +376,7 @@ fun SettingsScreen(
                         containerColor = MaterialTheme.colorScheme.surface,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     ),
-                    shape = cardShape,
+                    shape = selectedCornerStyle,
                     border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -353,67 +392,18 @@ fun SettingsScreen(
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "Dynamic Color (Android 12+)",
+                                    text = "Shapes used from your app",
                                     style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Medium,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
-                                    text = "Derive accent tones from wallpaper palette",
+                                    text = "Select how the corners of your elements would be displayed ",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
-                            Switch(
-                                checked = dynamicColorEnabled,
-                                onCheckedChange = { enabled ->
-                                    onDynamicColorToggle(enabled)
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(if (enabled) "Enabled Monet Dynamic Palette" else "Using App Theme Color Palette")
-                                    }
-                                },
-                                colors = SwitchDefaults.colors(
-                                    checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary
-                                )
-                            )
-                        }
 
-                        // AMOLED Pitch Black Switch (if dark theme)
-                        if (currentTheme.isDark) {
-                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = "Pure AMOLED Pitch Black (#000000)",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.Medium,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                    Text(
-                                        text = "Max battery efficiency on OLED displays",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                Switch(
-                                    checked = isAmoledDark,
-                                    onCheckedChange = { amoled ->
-                                        isAmoledDark = amoled
-                                        scope.launch {
-                                            snackbarHostState.showSnackbar(if (amoled) "AMOLED Pitch Black Enabled" else "Standard Dark Surface Restored")
-                                        }
-                                    },
-                                    colors = SwitchDefaults.colors(
-                                        checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                                        checkedTrackColor = MaterialTheme.colorScheme.primary
-                                    )
-                                )
-                            }
                         }
 
                         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -432,7 +422,7 @@ fun SettingsScreen(
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
-                                    text = "Material3 Shapes",
+                                    text = "Your shapes",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -443,21 +433,21 @@ fun SettingsScreen(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 val cornerStyles = listOf(
-                                    Triple("Rounded", "24.dp", RoundedCornerShape(24.dp)),
-                                    Triple("Semi-Round", "12.dp", RoundedCornerShape(12.dp)),
-                                    Triple("Sharp", "2.dp", RoundedCornerShape(2.dp))
+                                    Triple(Shapes.extraSmall, "Small", "Sharp corners"),
+                                    Triple(Shapes.medium, "Medium", "Semi rounded"),
+                                    Triple(Shapes.extraLarge, "Large", "More rounded")
                                 )
 
-                                cornerStyles.forEach { (name, radiusLabel, shape) ->
-                                    val isSelected = selectedCornerStyle == name || (name == "Semi-Round" && selectedCornerStyle == "Semi-Rounded")
+                                cornerStyles.forEach { (shape, name, description) ->
+                                    val isSelected = selectedCornerStyle == shape
                                     Box(modifier = Modifier.weight(1f)) {
                                         Card(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .clickable {
-                                                    selectedCornerStyle = name
+                                                    selectedCornerStyle = shape
                                                     scope.launch {
-                                                        snackbarHostState.showSnackbar("Corner Style: $name")
+                                                        //snackbarHostState.showSnackbar("Corner Style: $description", duration = SnackbarDuration.Short)
                                                     }
                                                 },
                                             shape = shape,
@@ -469,7 +459,7 @@ fun SettingsScreen(
                                                 color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
                                             ),
                                             colors = CardDefaults.cardColors(
-                                                containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                                containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
                                             )
                                         ) {
                                             Column(
@@ -510,8 +500,9 @@ fun SettingsScreen(
                                                         color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
                                                     )
                                                     Text(
-                                                        text = radiusLabel,
+                                                        text = description,
                                                         style = MaterialTheme.typography.labelSmall,
+                                                        maxLines = 1,
                                                         fontSize = 9.sp,
                                                         color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                                                     )
@@ -551,7 +542,7 @@ fun SettingsScreen(
                         containerColor = MaterialTheme.colorScheme.surface,
                         contentColor = MaterialTheme.colorScheme.onSurface
                     ),
-                    shape = cardShape,
+                    shape = selectedCornerStyle,
                     border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -572,7 +563,7 @@ fun SettingsScreen(
                                 Box(
                                     modifier = Modifier
                                         .size(32.dp)
-                                        .clip(cardShape)
+                                        .clip(selectedCornerStyle)
                                         .background(MaterialTheme.colorScheme.secondaryContainer),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -602,7 +593,7 @@ fun SettingsScreen(
                                 onCheckedChange = {
                                     notificationsEnabled = it
                                     scope.launch {
-                                        snackbarHostState.showSnackbar(if (it) "Notifications enabled" else "Notifications muted")
+                                        //snackbarHostState.showSnackbar(if (it) "Notifications enabled" else "Notifications muted")
                                     }
                                 },
                                 colors = SwitchDefaults.colors(
@@ -627,7 +618,7 @@ fun SettingsScreen(
                                 Box(
                                     modifier = Modifier
                                         .size(32.dp)
-                                        .clip(cardShape)
+                                        .clip(selectedCornerStyle)
                                         .background(MaterialTheme.colorScheme.tertiaryContainer),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -666,50 +657,6 @@ fun SettingsScreen(
                                 )
                             )
                         }
-
-                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-
-                        // Sound Volume Slider
-                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.VolumeUp,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(16.dp)
-                                    )
-                                    Text(
-                                        text = "Effects Sound Volume",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.Medium,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
-                                Text(
-                                    text = "${(soundVolume * 100).toInt()}%",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                            Slider(
-                                value = soundVolume,
-                                onValueChange = { soundVolume = it },
-                                colors = SliderDefaults.colors(
-                                    thumbColor = MaterialTheme.colorScheme.primary,
-                                    activeTrackColor = MaterialTheme.colorScheme.primary,
-                                    inactiveTrackColor = MaterialTheme.colorScheme.outlineVariant
-                                )
-                            )
-                        }
                     }
                 }
             }
@@ -718,13 +665,13 @@ fun SettingsScreen(
             Button(
                 onClick = {
                     scope.launch {
-                        snackbarHostState.showSnackbar("Theme Active: ${currentTheme.name} (${if (currentTheme.isDark) "DARK" else "LIGHT"})")
+                        snackbarHostState.showSnackbar("Theme Active: ${appState.currentTheme.name} (${if (appState.currentTheme.isDark) "DARK" else "LIGHT"})")
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
-                shape = cardShape,
+                shape = selectedCornerStyle,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
@@ -746,6 +693,62 @@ fun SettingsScreen(
     }
 }
 
+
+
+
+val themeColors: Map<AppTheme, List<androidx.compose.ui.graphics.Color>> = mapOf(
+    AppTheme.AURORA_TEAL to listOf(
+        AuroraTealPrimary,
+        AuroraTealSecondary,
+        AuroraTealTertiary,
+        AuroraTealSurface,
+        AuroraTealOnSurface
+    ),
+
+    AppTheme.SUNSET_CORAL to listOf(
+        SunsetCoralPrimary,
+        SunsetCoralSecondary,
+        SunsetCoralTertiary,
+        SunsetCoralSurface,
+        SunsetCoralOnSurface
+    ),
+
+    AppTheme.NORDIC_SAPPHIRE to listOf(
+        NordicSapphirePrimary,
+        NordicSapphireSecondary,
+        NordicSapphireTertiary,
+        NordicSapphireSurface,
+        NordicSapphireOnSurface
+    ),
+
+    AppTheme.CYBER_VIOLET to listOf(
+        CyberVioletPrimary,
+        CyberVioletSecondary,
+        CyberVioletTertiary,
+        CyberVioletSurface,
+        CyberVioletOnSurface
+    ),
+
+    AppTheme.TOKYO_CYAN to listOf(
+        TokyoCyanPrimary,
+        TokyoCyanSecondary,
+        TokyoCyanTertiary,
+        TokyoCyanSurface,
+        TokyoCyanOnSurface
+    ),
+
+    AppTheme.ESPRESSO_GOLD to listOf(
+        EspressoGoldPrimary,
+        EspressoGoldSecondary,
+        EspressoGoldTertiary,
+        EspressoGoldSurface,
+        EspressoGoldOnSurface
+    )
+)
+
+
+
+
 @Composable
 private fun ThemePaletteCard(
     theme: AppTheme,
@@ -753,6 +756,9 @@ private fun ThemePaletteCard(
     cornerShape: CornerBasedShape,
     onClick: () -> Unit
 ) {
+
+    val colors = themeColors[theme] ?: listOf(Color.Blue,Color.Red,Color.Cyan)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -763,7 +769,7 @@ private fun ThemePaletteCard(
             color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
         ),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = colors[3]
         )
     ) {
         Box(modifier = Modifier.padding(10.dp)) {
@@ -777,34 +783,35 @@ private fun ThemePaletteCard(
                         modifier = Modifier
                             .size(14.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary)
+                            .background(colors[0])
                     )
                     Box(
                         modifier = Modifier
                             .size(10.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.secondary)
+                            .background(colors[1])
                     )
                     Box(
                         modifier = Modifier
                             .size(10.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.tertiary)
+                            .background(colors[2])
                     )
                 }
 
                 Text(
-                    text = theme.name,
-                    style = MaterialTheme.typography.labelMedium,
+                    text = theme.displayName,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1
+                    color = colors[4],
+                    maxLines = 2,
+                    minLines = 2 // so the card are all high he same
                 )
 
                 Text(
                     text = if (theme.isDark) "Dark Mode" else "Light Mode",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = colors[4].copy(alpha = .8f),
                     maxLines = 1,
                     fontSize = 9.sp
                 )

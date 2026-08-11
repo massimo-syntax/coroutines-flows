@@ -1,32 +1,20 @@
 package com.example.coroutinesflows.designsystem.theme
 
-
-
-
-
-
-import android.os.Build
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.isSystemInDarkTheme
 //import androidx.compose.material3.ColorScheme
 //import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 //import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
 
-
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import com.example.designsystem.theme.Shapes
 import com.example.designsystem.theme.thememodel.AppTheme
 
 
@@ -58,14 +46,7 @@ private val LightColorScheme = lightColorScheme(
 /**
  * 6 Distinct Jetpack Compose Themes (3 Light & 3 Dark)
  */
-enum class AppTheme(val displayName: String, val isDark: Boolean) {
-    AURORA_TEAL("Aurora Teal", isDark = false),
-    SUNSET_CORAL("Sunset Coral", isDark = false),
-    NORDIC_SAPPHIRE("Nordic Sapphire", isDark = false),
-    CYBER_VIOLET("Cyber Violet", isDark = true),
-    TOKYO_CYAN("Tokyo Cyan", isDark = true),
-    ESPRESSO_GOLD("Espresso Gold", isDark = true)
-}
+
 
 // -------------------------------------------------------------
 // 1. Light Schemes
@@ -223,253 +204,6 @@ val EspressoGoldDarkColorScheme = darkColorScheme(
     onError = EspressoGoldOnError
 )
 
-/**
- * Animated ColorScheme wrapper for smooth theme switching transitions
- */
-@Composable
-fun animate(colorScheme: ColorScheme): ColorScheme {
-    val duration = 400
-    val spec = tween<Color>(durationMillis = duration)
-    return ColorScheme(
-        primary = animateColorAsState(colorScheme.primary, animationSpec = spec, label = "p").value,
-        onPrimary = animateColorAsState(
-            colorScheme.onPrimary,
-            animationSpec = spec,
-            label = "op"
-        ).value,
-        primaryContainer = animateColorAsState(
-            colorScheme.primaryContainer,
-            animationSpec = spec,
-            label = "pc"
-        ).value,
-        onPrimaryContainer = animateColorAsState(
-            colorScheme.onPrimaryContainer,
-            animationSpec = spec,
-            label = "opc"
-        ).value,
-        inversePrimary = animateColorAsState(
-            colorScheme.inversePrimary,
-            animationSpec = spec,
-            label = "ip"
-        ).value,
-        secondary = animateColorAsState(
-            colorScheme.secondary,
-            animationSpec = spec,
-            label = "s"
-        ).value,
-        onSecondary = animateColorAsState(
-            colorScheme.onSecondary,
-            animationSpec = spec,
-            label = "os"
-        ).value,
-        secondaryContainer = animateColorAsState(
-            colorScheme.secondaryContainer,
-            animationSpec = spec,
-            label = "sc"
-        ).value,
-        onSecondaryContainer = animateColorAsState(
-            colorScheme.onSecondaryContainer,
-            animationSpec = spec,
-            label = "osc"
-        ).value,
-        tertiary = animateColorAsState(
-            colorScheme.tertiary,
-            animationSpec = spec,
-            label = "t"
-        ).value,
-        onTertiary = animateColorAsState(
-            colorScheme.onTertiary,
-            animationSpec = spec,
-            label = "ot"
-        ).value,
-        tertiaryContainer = animateColorAsState(
-            colorScheme.tertiaryContainer,
-            animationSpec = spec,
-            label = "tc"
-        ).value,
-        onTertiaryContainer = animateColorAsState(
-            colorScheme.onTertiaryContainer,
-            animationSpec = spec,
-            label = "otc"
-        ).value,
-        background = animateColorAsState(
-            colorScheme.background,
-            animationSpec = spec,
-            label = "bg"
-        ).value,
-        onBackground = animateColorAsState(
-            colorScheme.onBackground,
-            animationSpec = spec,
-            label = "obg"
-        ).value,
-        surface = animateColorAsState(
-            colorScheme.surface,
-            animationSpec = spec,
-            label = "sf"
-        ).value,
-        onSurface = animateColorAsState(
-            colorScheme.onSurface,
-            animationSpec = spec,
-            label = "osf"
-        ).value,
-        surfaceVariant = animateColorAsState(
-            colorScheme.surfaceVariant,
-            animationSpec = spec,
-            label = "sv"
-        ).value,
-        onSurfaceVariant = animateColorAsState(
-            colorScheme.onSurfaceVariant,
-            animationSpec = spec,
-            label = "osv"
-        ).value,
-        surfaceTint = animateColorAsState(
-            colorScheme.surfaceTint,
-            animationSpec = spec,
-            label = "st"
-        ).value,
-        inverseSurface = animateColorAsState(
-            colorScheme.inverseSurface,
-            animationSpec = spec,
-            label = "isf"
-        ).value,
-        inverseOnSurface = animateColorAsState(
-            colorScheme.inverseOnSurface,
-            animationSpec = spec,
-            label = "iosf"
-        ).value,
-        error = animateColorAsState(colorScheme.error, animationSpec = spec, label = "e").value,
-        onError = animateColorAsState(
-            colorScheme.onError,
-            animationSpec = spec,
-            label = "oe"
-        ).value,
-        errorContainer = animateColorAsState(
-            colorScheme.errorContainer,
-            animationSpec = spec,
-            label = "ec"
-        ).value,
-        onErrorContainer = animateColorAsState(
-            colorScheme.onErrorContainer,
-            animationSpec = spec,
-            label = "oec"
-        ).value,
-        outline = animateColorAsState(
-            colorScheme.outline,
-            animationSpec = spec,
-            label = "ol"
-        ).value,
-        outlineVariant = animateColorAsState(
-            colorScheme.outlineVariant,
-            animationSpec = spec,
-            label = "olv"
-        ).value,
-        scrim = animateColorAsState(colorScheme.scrim, animationSpec = spec, label = "scrim").value,
-    )
-}
-
-/*
-
-/**
- * Main Jetpack Compose Theme Composable supporting the 6 Themes & Dynamic Color
- */
-@Composable
-fun AppTheme(
-    selectedTheme: AppTheme = AppTheme.AURORA_TEAL,
-    dynamicColor: Boolean = false,
-    content: @Composable () -> Unit
-) {
-    val context = LocalContext.current
-    val targetColorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            if (selectedTheme.isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        else -> when (selectedTheme) {
-            AppTheme.AURORA_TEAL -> AuroraTealLightColorScheme
-            AppTheme.SUNSET_CORAL -> SunsetCoralLightColorScheme
-            AppTheme.NORDIC_SAPPHIRE -> NordicSapphireLightColorScheme
-            AppTheme.CYBER_VIOLET -> CyberVioletDarkColorScheme
-            AppTheme.TOKYO_CYAN -> TokyoCyanDarkColorScheme
-            AppTheme.ESPRESSO_GOLD -> EspressoGoldDarkColorScheme
-        }
-    }
-
-    val animatedColorScheme = animate(targetColorScheme)
-
-    MaterialTheme(
-        colorScheme = animatedColorScheme,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
-}
-
-// SHAPES
-
-package com.example.app.ui.theme
-
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Shapes
-import androidx.compose.ui.unit.dp
-
-val Shapes = Shapes(
-    small = RoundedCornerShape(8.dp),
-    medium = RoundedCornerShape(16.dp),
-    large = RoundedCornerShape(24.dp)
-)
-
-
-
-
-
-
-
-
-
-
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @Composable
 fun CoroutinesFlowsTheme(
@@ -478,17 +212,20 @@ fun CoroutinesFlowsTheme(
 ) {
     val colorScheme = when (appTheme) {
         AppTheme.SYSTEM -> if (isSystemInDarkTheme()) DarkColorScheme else LightColorScheme //DarkDefaultColors else LightDefaultColors
-        AppTheme.LIGHT_DEFAULT -> LightColorScheme//LightDefaultColors
-        AppTheme.LIGHT_OCEAN -> LightColorScheme//LightOceanColors
-        AppTheme.LIGHT_SUNSET -> LightColorScheme//LightSunsetColors
-        AppTheme.DARK_DEFAULT -> DarkColorScheme//DarkDefaultColors
-        AppTheme.DARK_MIDNIGHT -> DarkColorScheme//DarkMidnightColors
-        AppTheme.DARK_FOREST -> DarkColorScheme//DarkForestColors
+        AppTheme.AURORA_TEAL -> AuroraTealLightColorScheme
+        AppTheme.SUNSET_CORAL -> SunsetCoralLightColorScheme
+        AppTheme.NORDIC_SAPPHIRE -> NordicSapphireLightColorScheme
+        AppTheme.CYBER_VIOLET -> CyberVioletDarkColorScheme
+        AppTheme.TOKYO_CYAN -> TokyoCyanDarkColorScheme
+        AppTheme.ESPRESSO_GOLD -> EspressoGoldDarkColorScheme
     }
+
 
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        shapes = Shapes,
+        content = content,
+
     )
 }

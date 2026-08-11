@@ -3,6 +3,7 @@ package com.example.core.preferences.datasourcedatastore
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -22,8 +23,11 @@ class PreferencesDataSource @Inject constructor(
 ) {
     private object Keys {
         val APP_THEME = stringPreferencesKey("app_theme")
+        val SHAPES = stringPreferencesKey("shapes")
+        val NOTIFICATIONS = booleanPreferencesKey("notifications")
     }
 
+    // theme
     val themeFlow: Flow<AppTheme> = dataStore.data
         .catch { e ->
             if (e is IOException) emit(emptyPreferences()) else throw e
@@ -40,4 +44,9 @@ class PreferencesDataSource @Inject constructor(
 
     /** Blocking read — use only once, for the very first value at process start. */
     fun getThemeBlocking(): AppTheme = runBlocking { themeFlow.first() }
+
+    // shapes
+
+    // notifications
+
 }

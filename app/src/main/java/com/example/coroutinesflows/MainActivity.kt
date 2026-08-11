@@ -2,14 +2,20 @@ package com.example.coroutinesflows
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.core.preferences.datasourcedatastore.PreferencesDataSource
 import com.example.coroutinesflows.designsystem.theme.CoroutinesFlowsTheme
+import com.example.designsystem.theme.thememodel.AppTheme
 import com.example.navigation.Nav
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -21,14 +27,34 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val theme = themeDataSource.getThemeBlocking()
+        // first setup
+        // @TODO check also for system darkmode
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(0, 0) { theme.isDark },
+            navigationBarStyle = SystemBarStyle.auto(0, 0) { theme.isDark }
+        )
+
+        // 1. Observe state changes natively inside the lifecycle
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Assuming your theme data source exposes a flow
+                themeDataSource.themeFlow.collect { currentTheme ->
+                    // 2. Safely call it outside Compose without any side-effect issues
+                    enableEdgeToEdge(
+                        statusBarStyle = SystemBarStyle.auto(0, 0) { currentTheme.isDark },
+                        navigationBarStyle = SystemBarStyle.auto(0, 0) { currentTheme.isDark }
+                    )
+                }
+            }
+        }
 
 
-        enableEdgeToEdge()
         setContent {
             val appState = rememberAppState(
                 initialTheme = theme,
                 themeDataSource = themeDataSource
             )
+
 
             CoroutinesFlowsTheme(appState.currentTheme) {
                 // access to the app state directly from the composable
