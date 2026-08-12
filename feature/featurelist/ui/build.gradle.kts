@@ -54,4 +54,7 @@ dependencies {
     implementation(project(":feature:flows:api"))
 
     implementation(project(":core:designsystem"))
+
+    // preferences, -appState- form compositionLocalProvider
+    implementation(project(":core:preferences"))
 }

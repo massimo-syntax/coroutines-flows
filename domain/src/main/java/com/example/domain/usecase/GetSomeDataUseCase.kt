@@ -12,11 +12,9 @@ private val repository: MyRepository
     suspend operator fun invoke(): List<MyData>{
         try{
             return repository.getData()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             // send to UI
             error(e.message.toString())
         }
     }
-
-
 }

@@ -32,4 +32,3 @@ object NetworkModule {
             .create(MockApiService::class.java)
     }
 }
-

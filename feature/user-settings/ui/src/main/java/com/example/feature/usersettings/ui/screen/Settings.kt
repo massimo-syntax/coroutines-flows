@@ -1,68 +1,68 @@
 package com.example.feature.usersettings.ui.screen
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.example.coroutinesflows.LocalAppState
-import com.example.designsystem.theme.thememodel.AppTheme
-
-
-/*
-
-
-@Composable
-fun SettingsScreen() {
-    val appState = LocalAppState.current
-
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-    ) {
-        AppTheme.entries.forEach { theme ->
-            Row(
-                modifier = Modifier.clickable { appState.setTheme(theme) }
-            ) {
-                RadioButton(
-                    selected = appState.currentTheme == theme,
-                    onClick = { appState.setTheme(theme) }
-                )
-                Text(theme.name)
-            }
-        }
-    }
-}
-
-
-
- */
-
-
-
+import android.widget.Toast
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.TouchApp
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.coroutinesflows.LocalAppState
+import com.example.designsystem.theme.asCornerShape
 import com.example.coroutinesflows.designsystem.theme.AuroraTealOnSurface
 import com.example.coroutinesflows.designsystem.theme.AuroraTealPrimary
 import com.example.coroutinesflows.designsystem.theme.AuroraTealSecondary
@@ -93,40 +93,21 @@ import com.example.coroutinesflows.designsystem.theme.TokyoCyanPrimary
 import com.example.coroutinesflows.designsystem.theme.TokyoCyanSecondary
 import com.example.coroutinesflows.designsystem.theme.TokyoCyanSurface
 import com.example.coroutinesflows.designsystem.theme.TokyoCyanTertiary
-import com.example.designsystem.theme.Shapes
+import com.example.core.preferences.model.AppTheme
 import kotlinx.coroutines.launch
 
-/**
- * Modern Jetpack Compose Settings Screen matching 1:1 with the interactive live preview.
- * Fully responsive, uses MaterialTheme.colorScheme and MaterialTheme.shapes everywhere.
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-    //`AppState.currentTheme`: AppTheme = AppTheme.SYSTEM,
-    onThemeSelected: (AppTheme) -> Unit = {},
-) {
+fun SettingsScreen() {
 
     val appState = LocalAppState.current
-
-    var notificationsEnabled by remember { mutableStateOf(true) }
-    var hapticsEnabled by remember { mutableStateOf(true) }
-
-    var selectedCornerStyle by remember { mutableStateOf(Shapes.small) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val shape = Shapes.small
-    // Corner shape definition based on selected style
-    /*
-    val cardShape = when (selectedCornerStyle) {
-        "Sharp" -> RoundedCornerShape(8.dp)
-        "Rounded" -> RoundedCornerShape(24.dp)
-        else -> RoundedCornerShape(16.dp)
-    }
+    val selectedCornerStyle = appState.cornerRadiusValue.asCornerShape()
 
-     */
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -162,7 +143,7 @@ fun SettingsScreen(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = appState.currentTheme.name,
+                                text = appState.currentTheme.displayName,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -195,7 +176,7 @@ fun SettingsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Header Title Banner
+            // Screen Title
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -230,7 +211,7 @@ fun SettingsScreen(
                 }
             }
 
-            // SECTION 1: 6 Theme Palettes (3 Light & 3 Dark)
+            // SELECT THEME SECTION
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -351,7 +332,7 @@ fun SettingsScreen(
                 }
             }
 
-            // SECTION 2: Material 3 Customization
+            // SELECT CORNER RADIUS SECTION
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -364,7 +345,7 @@ fun SettingsScreen(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = "MATERIAL 3 CUSTOMIZATION",
+                        text = "CORNERS CUSTOMIZATION",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
@@ -384,7 +365,7 @@ fun SettingsScreen(
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
-                        // Dynamic Monet Color Switch
+                        // short feature description -corner radius preference-
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -405,10 +386,7 @@ fun SettingsScreen(
                             }
 
                         }
-
                         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-
-                        // Corner Radius Style (Artistic Compact Shape Cards)
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -428,31 +406,33 @@ fun SettingsScreen(
                                 )
                             }
 
+                            // Select corner radius on click
+
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 val cornerStyles = listOf(
-                                    Triple(Shapes.extraSmall, "Small", "Sharp corners"),
-                                    Triple(Shapes.medium, "Medium", "Semi rounded"),
-                                    Triple(Shapes.extraLarge, "Large", "More rounded")
+                                    Triple(4, "Small", "Sharp corners"),
+                                    Triple(8, "Medium", "Semi rounded"),
+                                    Triple(20, "Large", "More rounded")
                                 )
 
-                                cornerStyles.forEach { (shape, name, description) ->
-                                    val isSelected = selectedCornerStyle == shape
+                                cornerStyles.forEach { (radius, name, description) ->
+                                    val isSelected = appState.cornerRadiusValue == radius
                                     Box(modifier = Modifier.weight(1f)) {
                                         Card(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .clickable {
-                                                    selectedCornerStyle = shape
+                                                    appState.setCornerRadius(radius)
                                                     scope.launch {
                                                         //snackbarHostState.showSnackbar("Corner Style: $description", duration = SnackbarDuration.Short)
                                                     }
                                                 },
-                                            shape = shape,
+                                            shape = RoundedCornerShape(radius.dp),
                                             elevation = CardDefaults.cardElevation(
-                                                defaultElevation = if (isSelected) 8.dp else 1.dp
+                                                defaultElevation = 4.dp
                                             ),
                                             border = androidx.compose.foundation.BorderStroke(
                                                 width = if (isSelected) 2.dp else 1.dp,
@@ -473,14 +453,14 @@ fun SettingsScreen(
                                                 Box(
                                                     modifier = Modifier
                                                         .size(38.dp, 22.dp)
-                                                        .clip(shape)
+                                                        .clip(RoundedCornerShape(radius))
                                                         .background(
                                                             if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.25f) else Color.Transparent
                                                         )
                                                         .border(
                                                             width = 2.dp,
                                                             color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-                                                            shape = shape
+                                                            shape = RoundedCornerShape(radius)
                                                         ),
                                                     contentAlignment = Alignment.Center
                                                 ) {
@@ -517,7 +497,7 @@ fun SettingsScreen(
                 }
             }
 
-            // SECTION 3: Device Preferences
+            // Device Preferences: notifications, haptic feedback
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -589,9 +569,9 @@ fun SettingsScreen(
                                 }
                             }
                             Switch(
-                                checked = notificationsEnabled,
+                                checked = appState.areNotificationsEnabled,
                                 onCheckedChange = {
-                                    notificationsEnabled = it
+                                    appState.setNotificationsEnabled(it)
                                     scope.launch {
                                         //snackbarHostState.showSnackbar(if (it) "Notifications enabled" else "Notifications muted")
                                     }
@@ -644,9 +624,9 @@ fun SettingsScreen(
                                 }
                             }
                             Switch(
-                                checked = hapticsEnabled,
+                                checked = appState.areHapticsEnabled,
                                 onCheckedChange = {
-                                    hapticsEnabled = it
+                                    appState.setHapticsEnabled(it)
                                     scope.launch {
                                         snackbarHostState.showSnackbar(if (it) "Haptics enabled" else "Haptics disabled")
                                     }

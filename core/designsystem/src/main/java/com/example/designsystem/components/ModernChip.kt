@@ -4,7 +4,6 @@ import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.EaseInExpo
 import androidx.compose.animation.core.EaseInOutBounce
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
@@ -17,8 +16,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,18 +25,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.coroutinesflows.LocalAppState
+import com.example.designsystem.theme.asCornerShape
 import androidx.compose.ui.unit.sp
 
 
 data class ChipData(
     val label: String,
-    val icon: ImageVector,
-    val selectedColor: Color
+    val icon: ImageVector
 )
 
 @Composable
@@ -47,6 +46,9 @@ fun ModernChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val appState = LocalAppState.current
+    val shape = appState.cornerRadiusValue.asCornerShape()
+
     val transition = updateTransition(
         targetState = selected,
         label = "chipTransition"
@@ -62,9 +64,9 @@ fun ModernChip(
         label = "background"
     ) { isSelected ->
         if (isSelected) {
-            chipData.selectedColor
+            MaterialTheme.colorScheme.primary
         } else {
-            Color.White
+            MaterialTheme.colorScheme.surfaceContainer
         }
     }
 
@@ -77,12 +79,30 @@ fun ModernChip(
         },
         label = "content"
     ) { isSelected ->
+
         if (isSelected) {
-            Color.White
+            MaterialTheme.colorScheme.onPrimary
         } else {
-            Color(0xFF626262)
+            MaterialTheme.colorScheme.onSurfaceVariant
         }
     }
+
+    val iconColor by transition.animateColor(
+        transitionSpec = {
+            tween(
+                durationMillis = 200,
+                easing = EaseInExpo
+            )
+        },
+        label = "content"
+    ) { isSelected ->
+        if (isSelected) {
+            MaterialTheme.colorScheme.onPrimary
+        } else {
+            MaterialTheme.colorScheme.primary
+        }
+    }
+
 
     val borderColor by transition.animateColor(
         transitionSpec = {
@@ -94,9 +114,9 @@ fun ModernChip(
         label = "border"
     ) { isSelected ->
         if (isSelected) {
-            Color.White
+            Color.Transparent
         } else {
-            Color(0xFFE0E0E0)
+            MaterialTheme.colorScheme.outlineVariant
         }
     }
 
@@ -117,7 +137,7 @@ fun ModernChip(
         onClick = onClick,
         modifier = modifier
             .scale(scale),
-        shape = RoundedCornerShape(16.dp),
+        shape = shape,
         color = backgroundColor,
         border = BorderStroke(
             width = 1.dp,
@@ -138,7 +158,7 @@ fun ModernChip(
                 imageVector = chipData.icon,
                 contentDescription = null,
                 modifier = Modifier.size(19.dp),
-                tint = contentColor
+                tint = iconColor
             )
 
             Spacer(modifier = Modifier.width(8.dp))

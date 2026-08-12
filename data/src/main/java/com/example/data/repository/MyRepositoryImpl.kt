@@ -19,6 +19,4 @@ class MyRepositoryImpl @Inject constructor(
             error(e.message.toString())
         }
     }
-
-
 }

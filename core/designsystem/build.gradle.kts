@@ -21,11 +21,9 @@ android {
     buildFeatures {
         compose = true
     }
-
 }
 
 dependencies {
-
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.animation.core)
@@ -37,4 +35,6 @@ dependencies {
 
     implementation("androidx.compose.material:material-icons-extended")
 
+    // preferences, -appState- form compositionLocalProvider
+    implementation(project(":core:preferences"))
 }

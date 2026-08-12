@@ -3,7 +3,6 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
     alias(libs.plugins.kotlin.compose)
-
 }
 
 android {
@@ -35,14 +34,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
 
-
-
-
     // hilt
     implementation("com.google.dagger:hilt-android:2.60.1")
     ksp("com.google.dagger:hilt-android-compiler:2.60.1")
-
-    // AppTheme
-    implementation(project(":core:designsystem"))
-
 }

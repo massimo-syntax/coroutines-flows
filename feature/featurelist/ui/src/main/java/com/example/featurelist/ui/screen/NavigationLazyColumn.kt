@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Favorite
@@ -30,7 +29,6 @@ import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,12 +37,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import coil.compose.AsyncImage
+import com.example.coroutinesflows.LocalAppState
+import com.example.designsystem.theme.asCornerShape
 import com.example.featurelist.ui.viewmodel.UiState
 
 @Composable
@@ -52,6 +53,9 @@ fun NavigationLazyColumn(
     navigateTo: (navKey: NavKey) -> Unit,
     listState: UiState
 ) {
+    val appState = LocalAppState.current
+    val shape = appState.cornerRadiusValue.asCornerShape()
+
     // for now category is selected, the list is already filtered in the viewmodel
     // so the check is enough if notEmpty()
     val coroutinesItems = listState.itemsList.filter { it.type == SelectedCategory.Coroutines }
@@ -68,7 +72,7 @@ fun NavigationLazyColumn(
                     title = "Coroutines",
                     subtitle = "Core Concurrency Utilities",
                     icon = Icons.Default.Bolt,
-                    badgeColor = Color(0xFF6750A4)
+                    badgeColor = MaterialTheme.colorScheme.primary
                 )
             }
 
@@ -82,6 +86,7 @@ fun NavigationLazyColumn(
                     description = "Start lightweight coroutines without blocking threads. Returns Job or Deferred<T>.",
                     imageUrl = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150",
                     tags = listOf("Job", "Deferred", "Scope"),
+                    shape = shape,
                     onClick = { navigateTo(it.navKey) }
                 )
             }
@@ -95,7 +100,7 @@ fun NavigationLazyColumn(
                     title = "Flows",
                     subtitle = "Core Reactive Stream Patterns",
                     icon = Icons.Default.Waves,
-                    badgeColor = Color(0xFF006A60)
+                    badgeColor = MaterialTheme.colorScheme.secondary
                 )
             }
 
@@ -109,6 +114,7 @@ fun NavigationLazyColumn(
                     description = "Start lightweight coroutines without blocking threads. Returns Job or Deferred<T>.",
                     imageUrl = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150",
                     tags = listOf("Job", "Deferred", "Scope"),
+                    shape = shape,
                     onClick = { navigateTo(it.navKey) }
                 )
             }
@@ -127,15 +133,18 @@ private fun SectionHeader(
     icon: ImageVector,
     badgeColor: Color
 ) {
+    val appState = LocalAppState.current
+    val shape = appState.cornerRadiusValue.asCornerShape()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFF8F9FA))
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Surface(
-            shape = RoundedCornerShape(8.dp),
+            shape = shape,
             color = badgeColor.copy(alpha = 0.12f),
             modifier = Modifier.size(32.dp)
         ) {
@@ -154,12 +163,12 @@ private fun SectionHeader(
                 text = title,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color(0xFF1D1B20)
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.labelSmall,
-                color = Color(0xFF49454F)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -173,15 +182,16 @@ private fun FancyListItem(
     description: String,
     imageUrl: String,
     tags: List<String>,
+    shape: Shape,
     onClick: () -> Unit
 ) {
     var isFavorite by remember { mutableStateOf(false) }
 
     ElevatedCard(
         onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
+        shape = shape,
         colors = CardDefaults.elevatedCardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 1.5.dp),
         modifier = Modifier
@@ -197,8 +207,8 @@ private fun FancyListItem(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(46.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFFF3EDF7))
+                        .clip(shape)
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -208,12 +218,12 @@ private fun FancyListItem(
                         text = title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1D1B20)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = subtitle,
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF6750A4),
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -225,7 +235,7 @@ private fun FancyListItem(
                     Icon(
                         imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = "Favorite",
-                        tint = if (isFavorite) Color(0xFFB3261E) else Color(0xFF79747E),
+                        tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outlineVariant ,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -236,7 +246,7 @@ private fun FancyListItem(
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF49454F),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 2
             )
 
@@ -249,8 +259,9 @@ private fun FancyListItem(
                         onClick = { },
                         label = { Text(tag, style = MaterialTheme.typography.labelSmall) },
                         colors = SuggestionChipDefaults.suggestionChipColors(
-                            containerColor = Color(0xFFF3EDF7)
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
+                        shape = shape,
                         border = null,
                         modifier = Modifier.height(26.dp)
                     )

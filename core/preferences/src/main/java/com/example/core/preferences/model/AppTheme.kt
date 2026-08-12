@@ -1,6 +1,4 @@
-package com.example.designsystem.theme.thememodel
-
-
+package com.example.core.preferences.model
 
 enum class AppTheme(val displayName: String) {
     SYSTEM("System"),

@@ -13,7 +13,6 @@ class MockInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val url = chain.request().url
-        val encodedPath = url.encodedPath
 
         val response = server.routeResponse( url.encodedPathSegments.last() )
 

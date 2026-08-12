@@ -1,21 +1,14 @@
 package com.example.coroutinesflows.designsystem.theme
 
-//import androidx.compose.material3.ColorScheme
-//import androidx.compose.material3.MaterialTheme
-//import androidx.compose.runtime.Composable
-
-
-import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import com.example.designsystem.theme.Shapes
-import com.example.designsystem.theme.thememodel.AppTheme
+import androidx.compose.ui.unit.dp
+import com.example.core.preferences.model.AppTheme
 
 
 private val DarkColorScheme = darkColorScheme(
@@ -39,9 +32,6 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
-
-
-
 
 /**
  * 6 Distinct Jetpack Compose Themes (3 Light & 3 Dark)
@@ -208,6 +198,7 @@ val EspressoGoldDarkColorScheme = darkColorScheme(
 @Composable
 fun CoroutinesFlowsTheme(
     appTheme: AppTheme,
+    cornerRadius: Int = 16,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when (appTheme) {
@@ -220,12 +211,21 @@ fun CoroutinesFlowsTheme(
         AppTheme.ESPRESSO_GOLD -> EspressoGoldDarkColorScheme
     }
 
+    // Best Practice: Dynamically calculate shapes and apply them to MaterialTheme.
+    // This allows components like ModernChip to use MaterialTheme.shapes.medium
+    // and automatically get the user-selected radius.
+    val shapes = Shapes(
+        extraSmall = RoundedCornerShape((cornerRadius / 4).dp),
+        small = RoundedCornerShape((cornerRadius / 2).dp),
+        medium = RoundedCornerShape(cornerRadius.dp),
+        large = RoundedCornerShape((cornerRadius * 1.5).toInt().dp),
+        extraLarge = RoundedCornerShape((cornerRadius * 2).dp)
+    )
 
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        shapes = Shapes,
+        shapes = shapes,
         content = content,
-
     )
 }

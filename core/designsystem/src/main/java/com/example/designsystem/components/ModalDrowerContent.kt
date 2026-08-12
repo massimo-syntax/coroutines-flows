@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Compare
@@ -34,15 +34,13 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.example.coroutinesflows.LocalAppState
+import com.example.designsystem.theme.asCornerShape
 
 
 @Composable
@@ -51,9 +49,15 @@ fun ModalDrawerContent(
     onNavigateToSettings: () -> Unit = {},
     closeDrawer: () -> Unit
 ){
+    val appState = LocalAppState.current
+    val shape = appState.cornerRadiusValue.asCornerShape()
+
     ModalDrawerSheet(
-        drawerShape = RoundedCornerShape(topEnd = 28.dp, bottomEnd = 28.dp),
-        drawerContainerColor = Color(0xFFFAFAFC),
+        drawerShape = shape.copy(
+            topStart = CornerSize(0.dp),
+            bottomStart = CornerSize(0.dp)
+        ),
+        drawerContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         modifier = Modifier.width(300.dp)
     ) {
         DrawerHeader(
@@ -67,7 +71,7 @@ fun ModalDrawerContent(
             text = "NAVIGATION",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.ExtraBold,
-            color = Color(0xFF79747E),
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)
         )
 
@@ -75,12 +79,12 @@ fun ModalDrawerContent(
         NavigationDrawerItem(
             icon = {
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
-                    color = Color(0xFFE8DEF8),
+                    shape = shape,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier.size(32.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Icon(Icons.Outlined.Person, contentDescription = null, tint = Color(0xFF6750A4), modifier = Modifier.size(18.dp))
+                        Icon(Icons.Outlined.Person, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.size(18.dp))
                     }
                 }
             },
@@ -97,12 +101,12 @@ fun ModalDrawerContent(
         NavigationDrawerItem(
             icon = {
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
-                    color = Color(0xFFE8DEF8),
+                    shape = shape,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier.size(32.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Icon(Icons.Outlined.Settings, contentDescription = null, tint = Color(0xFF6750A4), modifier = Modifier.size(18.dp))
+                        Icon(Icons.Outlined.Settings, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.size(18.dp))
                     }
                 }
             },
@@ -119,12 +123,12 @@ fun ModalDrawerContent(
         NavigationDrawerItem(
             icon = {
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
-                    color = Color(0xFFFFD8E4),
+                    shape = shape,
+                    color = MaterialTheme.colorScheme.tertiaryContainer,
                     modifier = Modifier.size(32.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Icon(Icons.Outlined.FavoriteBorder, contentDescription = null, tint = Color(0xFFB3261E), modifier = Modifier.size(18.dp))
+                        Icon(Icons.Outlined.FavoriteBorder, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer, modifier = Modifier.size(18.dp))
                     }
                 }
             },
@@ -132,13 +136,13 @@ fun ModalDrawerContent(
             badge = {
                 Surface(
                     shape = CircleShape,
-                    color = Color(0xFFFFD8E4)
+                    color = MaterialTheme.colorScheme.tertiary
                 ) {
                     Text(
                         text = "6 items",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF31111D),
+                        color = MaterialTheme.colorScheme.onTertiary,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                     )
                 }
@@ -157,7 +161,7 @@ fun ModalDrawerContent(
             text = "CATEGORIES",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.ExtraBold,
-            color = Color(0xFF79747E),
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)
         )
 
@@ -177,10 +181,13 @@ fun ModalDrawerContent(
 fun DrawerHeader(
     onClose: () -> Unit = {}
 ) {
+    val appState = LocalAppState.current
+    val shape = appState.cornerRadiusValue.asCornerShape()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFE8DEF8))
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(18.dp)
     ) {
         Row(
@@ -191,8 +198,8 @@ fun DrawerHeader(
             // Profile Avatar with White Border Stroke & Elevation Shadow
             Surface(
                 shape = CircleShape,
-                color = Color(0xFF6750A4),
-                border = BorderStroke(2.dp, Color.White),
+                color = MaterialTheme.colorScheme.primary,
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline),
                 shadowElevation = 4.dp,
                 modifier = Modifier.size(52.dp)
             ) {
@@ -200,7 +207,7 @@ fun DrawerHeader(
                     Text(
                         text = "JD",
                         style = MaterialTheme.typography.titleMedium,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -214,7 +221,7 @@ fun DrawerHeader(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Close drawer",
-                    tint = Color(0xFF49454F),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -226,20 +233,20 @@ fun DrawerHeader(
             text = "John Developer",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF1D192B)
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Text(
             text = "john.dev@android.io",
             style = MaterialTheme.typography.bodySmall,
-            color = Color(0xFF49454F)
+            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // Colored Badge "Jetpack Compose 1.7"
         Surface(
-            shape = RoundedCornerShape(12.dp),
-            color = Color(0xFFD0BCFF)
+            shape = shape,
+            color = MaterialTheme.colorScheme.secondary
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -248,7 +255,7 @@ fun DrawerHeader(
                 Icon(
                     imageVector = Icons.Default.Compare,
                     contentDescription = null,
-                    tint = Color(0xFF381E72),
+                    tint = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier.size(14.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -256,7 +263,7 @@ fun DrawerHeader(
                     text = "Jetpack Compose 1.7",
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF381E72)
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
             }
         }
@@ -268,10 +275,13 @@ fun DrawerHeader(
  */
 @Composable
 fun CategoryProgressCard() {
+    val appState = LocalAppState.current
+    val shape = appState.cornerRadiusValue.asCornerShape()
+
     Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, Color(0xFFE0E2EC)),
+        shape = shape,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
@@ -281,8 +291,8 @@ fun CategoryProgressCard() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Coroutines", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1D1B20))
-                Text("3 Items", style = MaterialTheme.typography.labelSmall, color = Color(0xFF79747E))
+                Text("Coroutines", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                Text("3 Items", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.height(4.dp))
             LinearProgressIndicator(
@@ -291,8 +301,8 @@ fun CategoryProgressCard() {
                     .fillMaxWidth()
                     .height(6.dp)
                     .clip(CircleShape),
-                color = Color(0xFF0061A4),
-                trackColor = Color(0xFFE0E2EC)
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -301,8 +311,8 @@ fun CategoryProgressCard() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Flows", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1D1B20))
-                Text("3 Items", style = MaterialTheme.typography.labelSmall, color = Color(0xFF79747E))
+                Text("Flows", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                Text("3 Items", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.height(4.dp))
 
@@ -312,8 +322,8 @@ fun CategoryProgressCard() {
                     .fillMaxWidth()
                     .height(6.dp)
                     .clip(CircleShape),
-                color = Color(0xFF006A60),
-                trackColor = Color(0xFFE0E2EC)
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
         }
     }
@@ -325,7 +335,7 @@ fun CategoryProgressCard() {
 @Composable
 fun DrawerFooter() {
     Surface(
-        color = Color(0xFFF3EDF7),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -336,10 +346,10 @@ fun DrawerFooter() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text("Material You M3", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = Color(0xFF1D1B20))
-                Text("Kotlin 2.0 & Coroutines 1.8", style = MaterialTheme.typography.labelSmall, color = Color(0xFF49454F))
+                Text("Material You M3", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                Text("Kotlin 2.0 & Coroutines 1.8", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Icon(Icons.Default.Shield, contentDescription = null, tint = Color(0xFF006A60), modifier = Modifier.size(20.dp))
+            Icon(Icons.Default.Shield, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
         }
     }
 }

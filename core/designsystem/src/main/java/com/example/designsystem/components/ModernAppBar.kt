@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -48,12 +46,12 @@ fun ModernAppBar(
                     text = "Concurrency & Flows",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1D1B20)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = "Jetpack Compose Hub",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF49454F)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         },
@@ -63,7 +61,7 @@ fun ModernAppBar(
                     imageVector = if (isDrawerOpen) Icons.Default.Close else Icons.Default.Menu,
                     contentDescription = "Toggle Drawer",
                     modifier = Modifier.rotate(rotationAngle),
-                    tint = Color(0xFF1D1B20)
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         },
@@ -71,7 +69,7 @@ fun ModernAppBar(
             IconButton(onClick = onProfileClick) {
                 Surface(
                     shape = CircleShape,
-                    color = Color(0xFFE8DEF8),
+                    color = MaterialTheme.colorScheme.primaryContainer,
                     modifier = Modifier.size(32.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
@@ -79,14 +77,14 @@ fun ModernAppBar(
                             text = "JD",
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1D192B)
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFFF8F9FA)
+            containerColor = MaterialTheme.colorScheme.surface
         )
     )
 }

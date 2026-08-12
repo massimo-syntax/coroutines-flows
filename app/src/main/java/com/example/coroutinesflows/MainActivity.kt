@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.core.preferences.datasourcedatastore.PreferencesDataSource
 import com.example.coroutinesflows.designsystem.theme.CoroutinesFlowsTheme
-import com.example.designsystem.theme.thememodel.AppTheme
+import com.example.core.preferences.model.AppTheme
 import com.example.navigation.Nav
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
@@ -27,6 +27,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val theme = themeDataSource.getThemeBlocking()
+        val cornerRadius = themeDataSource.getCornerRadiusBlocking()
+
         // first setup
         // @TODO check also for system darkmode
         enableEdgeToEdge(
@@ -48,21 +50,22 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-
         setContent {
             val appState = rememberAppState(
                 initialTheme = theme,
-                themeDataSource = themeDataSource
+                initialCornerRadius = cornerRadius,
+                preferencesDataSource = themeDataSource
             )
 
-
-            CoroutinesFlowsTheme(appState.currentTheme) {
+            CoroutinesFlowsTheme(
+                appTheme = appState.currentTheme,
+                cornerRadius = appState.cornerRadiusValue
+            ) {
                 // access to the app state directly from the composable
                 CompositionLocalProvider(LocalAppState provides appState) {
                     Nav()
                 }
             }
-
         }
     }
 }

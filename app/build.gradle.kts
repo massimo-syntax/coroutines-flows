@@ -55,8 +55,6 @@ dependencies {
     implementation(libs.androidx.material3.adaptive.navigation3)
     implementation(libs.kotlinx.serialization.core)
 
-
-
     // hilt
     implementation("com.google.dagger:hilt-android:2.60.1")
     ksp("com.google.dagger:hilt-android-compiler:2.60.1")
@@ -81,10 +79,6 @@ dependencies {
     // to me it works also with just data
     // implementation(project(":domain"))
     implementation(project(":data"))
-    // because im not using ai yet, while googling brings not that much,
-    // i would be glad not to be tagged as a production bottleneck if in such cases
-    // would i quickly schedule a call with some senior, even if the senior is jounger than me.
-
 
     // theme
     implementation(project(":core:designsystem"))

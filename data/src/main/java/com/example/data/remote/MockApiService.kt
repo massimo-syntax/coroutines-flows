@@ -9,5 +9,4 @@ interface MockApiService {
 
     @GET("other")
     suspend fun getOther(): List<SomeNetworkDataDto>
-
 }
