@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.core.preferences.PreferencesCache
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +26,10 @@ object DataStoreModule {
     fun provideThemeDataStore(
         @ApplicationContext context: Context
     ): DataStore<Preferences> = context.themeDataStore
+
+    @Provides
+    @Singleton
+    fun providePreferencesCache(
+        @ApplicationContext context: Context
+    ): PreferencesCache = PreferencesCache(context)
 }

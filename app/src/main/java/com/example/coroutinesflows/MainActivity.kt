@@ -9,9 +9,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.core.preferences.PreferencesCache
 import com.example.core.preferences.datasourcedatastore.PreferencesDataSource
 import com.example.coroutinesflows.designsystem.theme.CoroutinesFlowsTheme
-import com.example.core.preferences.model.AppTheme
 import com.example.navigation.Nav
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
@@ -23,17 +23,20 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var themeDataSource: PreferencesDataSource
 
+    @Inject
+    lateinit var preferencesCache: PreferencesCache
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val theme = themeDataSource.getThemeBlocking()
-        val cornerRadius = themeDataSource.getCornerRadiusBlocking()
+        // FRAME 0: Load from cache instantly (~1ms, no I/O blocking)
+        val cachedTheme = preferencesCache.theme
+        val cachedRadius = preferencesCache.cornerRadius
 
-        // first setup
-        // @TODO check also for system darkmode
+        // Apply system bar style with cached theme BEFORE setContent
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.auto(0, 0) { theme.isDark },
-            navigationBarStyle = SystemBarStyle.auto(0, 0) { theme.isDark }
+            statusBarStyle = SystemBarStyle.auto(0, 0) { cachedTheme.isDark },
+            navigationBarStyle = SystemBarStyle.auto(0, 0) { cachedTheme.isDark }
         )
 
         // 1. Observe state changes natively inside the lifecycle
@@ -52,8 +55,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val appState = rememberAppState(
-                initialTheme = theme,
-                initialCornerRadius = cornerRadius,
+                initialTheme = cachedTheme,
+                initialCornerRadius = cachedRadius,
                 preferencesDataSource = themeDataSource
             )
 
@@ -69,5 +72,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-

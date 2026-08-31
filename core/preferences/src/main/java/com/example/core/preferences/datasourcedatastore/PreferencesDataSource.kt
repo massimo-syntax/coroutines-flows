@@ -8,19 +8,19 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.core.preferences.PreferencesCache
 import com.example.core.preferences.model.AppTheme
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 
 
 @Singleton
 class PreferencesDataSource @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val preferencesCache: PreferencesCache
 ) {
     private object Keys {
         val APP_THEME = stringPreferencesKey("app_theme")
@@ -42,10 +42,8 @@ class PreferencesDataSource @Inject constructor(
 
     suspend fun setTheme(theme: AppTheme) {
         dataStore.edit { it[Keys.APP_THEME] = theme.name }
+        preferencesCache.updateTheme(theme) // Sync cache
     }
-
-    /** Blocking read — use only once, for the very first value at process start. */
-    fun getThemeBlocking(): AppTheme = runBlocking { themeFlow.first() }
 
     // corner radius
     val cornerRadiusFlow: Flow<Int> = dataStore.data
@@ -54,11 +52,10 @@ class PreferencesDataSource @Inject constructor(
 
     suspend fun setCornerRadius(radius: Int) {
         dataStore.edit { it[Keys.CORNER_RADIUS] = radius }
+        preferencesCache.updateCornerRadius(radius) // Sync cache
     }
 
     suspend fun getCornerRadius(): Int = cornerRadiusFlow.first()
-
-    fun getCornerRadiusBlocking(): Int = runBlocking { cornerRadiusFlow.first() }
 
     // notifications
     val notificationsFlow: Flow<Boolean> = dataStore.data
@@ -71,8 +68,6 @@ class PreferencesDataSource @Inject constructor(
 
     suspend fun isNotificationsEnabled(): Boolean = notificationsFlow.first()
 
-    fun isNotificationsEnabledBlocking(): Boolean = runBlocking { notificationsFlow.first() }
-
     // haptics
     val hapticsFlow: Flow<Boolean> = dataStore.data
         .catch { e -> if (e is IOException) emit(emptyPreferences()) else throw e }
@@ -83,7 +78,4 @@ class PreferencesDataSource @Inject constructor(
     }
 
     suspend fun isHapticsEnabled(): Boolean = hapticsFlow.first()
-
-    fun isHapticsEnabledBlocking(): Boolean = runBlocking { hapticsFlow.first() }
-
 }
