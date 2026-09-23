@@ -1,4 +1,4 @@
-package com.example.coroutinesflows
+package com.example.core.preferences
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
