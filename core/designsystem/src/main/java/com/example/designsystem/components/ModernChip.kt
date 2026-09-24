@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,8 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.coroutinesflows.LocalAppState
-import com.example.designsystem.theme.asCornerShape
+import com.example.core.preferences.LocalAppState
 import androidx.compose.ui.unit.sp
 
 
@@ -47,7 +47,7 @@ fun ModernChip(
     modifier: Modifier = Modifier
 ) {
     val appState = LocalAppState.current
-    val shape = appState.cornerRadiusValue.asCornerShape()
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
 
     val transition = updateTransition(
         targetState = selected,

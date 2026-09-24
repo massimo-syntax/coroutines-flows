@@ -1,6 +1,6 @@
 package com.example.data.di
 
-import com.example.data.remote.CloudServer
+import com.example.data.remote.HttpsWwwServerCom
 import com.example.data.remote.MockApiService
 import com.example.data.remote.MockInterceptor
 import dagger.Module
@@ -22,7 +22,7 @@ object NetworkModule {
         // Potential dependencies of this type
     ): MockApiService {
         val client = OkHttpClient.Builder()
-            .addInterceptor(MockInterceptor(CloudServer))
+            .addInterceptor(MockInterceptor(HttpsWwwServerCom))
             .build()
         return Retrofit.Builder()
             .baseUrl("https://url.api/") // dummy URL

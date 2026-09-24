@@ -34,7 +34,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     implementation("androidx.compose.material:material-icons-extended")
-
-    // preferences, -appState- form compositionLocalProvider
     implementation(project(":core:preferences"))
 }

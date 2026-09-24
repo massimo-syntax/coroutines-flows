@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,8 +33,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.example.coroutinesflows.LocalAppState
-import com.example.designsystem.theme.asCornerShape
+import com.example.core.preferences.LocalAppState
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -43,7 +43,7 @@ fun MaterialOutlinedTextField(
     modifier: Modifier = Modifier
 ) {
     val appState = LocalAppState.current
-    val shape = appState.cornerRadiusValue.asCornerShape()
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
 
     OutlinedTextField(
         value = query,
@@ -81,7 +81,7 @@ fun ModernSearchTextField(
 ) {
     val focusManager = LocalFocusManager.current
     val appState = LocalAppState.current
-    val shape = appState.cornerRadiusValue.asCornerShape()
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
 
     Surface(
         shape = shape,

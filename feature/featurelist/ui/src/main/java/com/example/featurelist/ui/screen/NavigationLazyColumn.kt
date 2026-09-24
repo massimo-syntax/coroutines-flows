@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Favorite
@@ -44,8 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import coil.compose.AsyncImage
-import com.example.coroutinesflows.LocalAppState
-import com.example.designsystem.theme.asCornerShape
+import com.example.core.preferences.LocalAppState
 import com.example.featurelist.ui.viewmodel.UiState
 
 @Composable
@@ -54,7 +54,8 @@ fun NavigationLazyColumn(
     listState: UiState
 ) {
     val appState = LocalAppState.current
-    val shape = appState.cornerRadiusValue.asCornerShape()
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+
 
     // for now category is selected, the list is already filtered in the viewmodel
     // so the check is enough if notEmpty()
@@ -134,7 +135,7 @@ private fun SectionHeader(
     badgeColor: Color
 ) {
     val appState = LocalAppState.current
-    val shape = appState.cornerRadiusValue.asCornerShape()
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,

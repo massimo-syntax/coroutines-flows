@@ -32,6 +32,7 @@ dependencies {
     // navigation3
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
     // default start key
     implementation(project(":feature:featurelist:api"))

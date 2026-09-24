@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Compare
@@ -39,8 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.coroutinesflows.LocalAppState
-import com.example.designsystem.theme.asCornerShape
+import com.example.core.preferences.LocalAppState
 
 
 @Composable
@@ -50,7 +50,7 @@ fun ModalDrawerContent(
     closeDrawer: () -> Unit
 ){
     val appState = LocalAppState.current
-    val shape = appState.cornerRadiusValue.asCornerShape()
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
 
     ModalDrawerSheet(
         drawerShape = shape.copy(
@@ -182,7 +182,7 @@ fun DrawerHeader(
     onClose: () -> Unit = {}
 ) {
     val appState = LocalAppState.current
-    val shape = appState.cornerRadiusValue.asCornerShape()
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
 
     Column(
         modifier = Modifier
@@ -276,7 +276,7 @@ fun DrawerHeader(
 @Composable
 fun CategoryProgressCard() {
     val appState = LocalAppState.current
-    val shape = appState.cornerRadiusValue.asCornerShape()
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
 
     Card(
         shape = shape,

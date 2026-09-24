@@ -1,4 +1,4 @@
-package com.example.presentation.coroutines.screen
+package com.example.presentation.coroutines.screen.verycomplicatedcoroutine
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

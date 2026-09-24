@@ -1,7 +1,5 @@
 package com.example.feature.usersettings.ui.screen
 
-import android.widget.Toast
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -57,12 +55,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.coroutinesflows.LocalAppState
-import com.example.designsystem.theme.asCornerShape
+import com.example.core.preferences.LocalAppState
 import com.example.coroutinesflows.designsystem.theme.AuroraTealOnSurface
 import com.example.coroutinesflows.designsystem.theme.AuroraTealPrimary
 import com.example.coroutinesflows.designsystem.theme.AuroraTealSecondary
@@ -94,6 +90,7 @@ import com.example.coroutinesflows.designsystem.theme.TokyoCyanSecondary
 import com.example.coroutinesflows.designsystem.theme.TokyoCyanSurface
 import com.example.coroutinesflows.designsystem.theme.TokyoCyanTertiary
 import com.example.core.preferences.model.AppTheme
+import com.example.core.preferences.model.CornerShape
 import kotlinx.coroutines.launch
 
 
@@ -106,8 +103,7 @@ fun SettingsScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val selectedCornerStyle = appState.cornerRadiusValue.asCornerShape()
-
+    val selectedCornerStyle =  RoundedCornerShape(appState.cornerRadiusValue)
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -321,7 +317,6 @@ fun SettingsScreen() {
                                 cornerShape = selectedCornerStyle,
                                 onClick = {
                                     appState.setTheme(theme)
-//                                    onThemeSelected(theme)
                                     scope.launch {
                                         //snackbarHostState.showSnackbar("Switched to Dark Theme: ${theme.name}")
                                     }
@@ -413,9 +408,9 @@ fun SettingsScreen() {
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 val cornerStyles = listOf(
-                                    Triple(4, "Small", "Sharp corners"),
-                                    Triple(8, "Medium", "Semi rounded"),
-                                    Triple(20, "Large", "More rounded")
+                                    Triple(CornerShape.SMALL.value, "Small", "Sharp corners"),
+                                    Triple(CornerShape.MEDIUM.value, "Medium", "Semi rounded"),
+                                    Triple(CornerShape.LARGE.value, "Large", "More rounded")
                                 )
 
                                 cornerStyles.forEach { (radius, name, description) ->
