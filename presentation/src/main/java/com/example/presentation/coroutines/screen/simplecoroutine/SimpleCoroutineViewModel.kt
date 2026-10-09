@@ -24,7 +24,7 @@ class SimpleCoroutineViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(loading = true) }
             try {
-                val data = repository.getData()
+                val data = repository.getSequentialNewestAndroidVersions()
                 _uiState.value = UiStateBasic(data = data)
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message, loading = false) }

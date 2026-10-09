@@ -21,10 +21,24 @@ class MockInterceptor(
         val path = url.encodedPathSegments.last()
 
         when(path){
+            // RANDOM DATA...
             DATA -> {
                 response = server.routeResponse( path )
                 code = 200
             }
+
+            // sequential routes to get first android version..
+            SEQUENTIAL_GET_NEWEST_ANDROID_VERSIONS -> {
+                response = server.routeResponse( path )
+                code = 200
+            }
+            // then features of it
+            SEQUENTIAL_GET_FEATURES_NEWEST_ANDROID_VERSIONS-> {
+                response = server.routeResponse( path )
+                code = 200
+            }
+
+            // ERROR ROUTE, request to mock an error
             ERROR -> {
                 code = 404
                 message = "MockInterceptor: Not found"

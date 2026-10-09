@@ -26,8 +26,6 @@ fun SimpleCoroutineScreen(
         Modifier.fillMaxSize().statusBarsPadding(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ){
-        Text("Simple coroutine anissimo")
-
         if(data.loading){
             Text("Loading")
         }

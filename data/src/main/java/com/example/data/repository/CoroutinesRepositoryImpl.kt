@@ -1,6 +1,5 @@
 package com.example.data.repository
 
-import android.net.Network
 import com.example.data.model.toMyData
 import com.example.data.remote.MockApiService
 import com.example.domain.model.MyData
@@ -14,6 +13,12 @@ class CoroutinesRepositoryImpl @Inject constructor(
     override suspend fun getData(): List<MyData> {
         return secureNetworkRequest { apiService.getData().toMyData() }
     }
+
+    override suspend fun getSequentialNewestAndroidVersions() =
+        secureNetworkRequest { apiService.getSequentialNewestAndroidVersions().toMyData() }
+
+    override suspend fun getSequentialFeaturesNewestAndroidVersions() =
+        secureNetworkRequest { apiService.getSequentialFeaturesNewestAndroidVersions().toMyData() }
 
     override suspend fun getError() {
         // get error does not return data, is for retrofit to return an error

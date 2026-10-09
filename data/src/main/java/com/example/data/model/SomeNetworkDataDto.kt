@@ -9,10 +9,10 @@ data class SomeNetworkDataDto(
     val id: String,
 
     @SerializedName("title")
-    val title: String?,
+    var title: String?,
 
     @SerializedName("body")
-    val body: String?,
+    var body: String?,
 
     @SerializedName("datetime")
     val dateTime: Long?,
