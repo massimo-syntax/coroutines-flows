@@ -1,6 +1,7 @@
 package com.example.featurelist.ui
 
 import androidx.navigation3.runtime.NavKey
+import com.example.feature.coroutines.api.SequentialCoroutines
 import com.example.feature.coroutines.api.VeryComplicatedCoroutine
 import com.example.feature.coroutines.api.VerySimpleCoroutine
 import com.example.flows.api.VeryFastFlow
@@ -47,6 +48,11 @@ val navigateableItems = listOf(
         title = "Complicated Coroutine",
         navKey = VeryComplicatedCoroutine
     ),
+    FeatureItem(
+        type = SelectedCategory.Coroutines,
+        title = "Sequential Coroutines",
+        navKey = SequentialCoroutines
+    ),
 
     // flows
     FeatureItem(
@@ -60,4 +66,3 @@ val navigateableItems = listOf(
         navKey = VeryFastFlow
     )
 )
-

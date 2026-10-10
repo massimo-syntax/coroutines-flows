@@ -8,3 +8,6 @@ data object VerySimpleCoroutine : NavKey
 
 @Serializable
 data object VeryComplicatedCoroutine : NavKey
+
+@Serializable
+data object SequentialCoroutines : NavKey
