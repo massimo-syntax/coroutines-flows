@@ -2,25 +2,16 @@ package com.example.presentation.coroutines.screen.sequentialCoroutines
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.AndroidFeature
 import com.example.domain.repository.CoroutinesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-sealed interface FeaturesUiState {
-    data object Initial : FeaturesUiState
-    data object Loading : FeaturesUiState
-    data class Success(
-        val allFeatures: List<AndroidFeature>,
-        val filteredFeatures: List<AndroidFeature>,
-        val searchQuery: String = ""
-    ) : FeaturesUiState
-}
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class FeaturesViewModel @Inject constructor(
@@ -30,48 +21,67 @@ class FeaturesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<FeaturesUiState>(FeaturesUiState.Initial)
     val uiState: StateFlow<FeaturesUiState> = _uiState.asStateFlow()
 
-    /**
-     * Triggered by the "Load Latest Features" button on the initial screen.
-     */
-    fun loadFeatures() {
+
+    fun mountListAndLoad() {
         viewModelScope.launch {
-            _uiState.value = FeaturesUiState.Loading
+            // Mount the list screen with both loaders active
+            _uiState.value = FeaturesUiState.ListScreen(
+                isVersionLoading = true,
+                lastAndroidVersion = null,
+                isFeaturesLoading = true,
+                features = emptyList()
+            )
+
             try {
+                // Step 1: Sequential call to fetch newest versions & take last
+                val versions = repository.getSequentialNewestAndroidVersions()
+                delay(0.5.seconds)
+                val latestVersion = versions.last().title // "36"
+
+                // State update 1: Version loaded (Version loader clears -> Version banner displays)
+                val currentScreen = _uiState.value as? FeaturesUiState.ListScreen
+                if (currentScreen != null) {
+                    _uiState.value = currentScreen.copy(
+                        isVersionLoading = false,
+                        lastAndroidVersion = latestVersion
+                    )
+                }
+
+                // Step 2: Sequential call to fetch features (runs with version already visible)
                 val data = repository.getSequentialFeaturesNewestAndroidVersions()
-                _uiState.value = FeaturesUiState.Success(
-                    allFeatures = data,
-                    filteredFeatures = data
-                )
+                delay(0.5.seconds)
+                // State update 2: Features loaded (List loader clears -> cards display)
+                val updatedScreen = _uiState.value as? FeaturesUiState.ListScreen
+                if (updatedScreen != null) {
+                    _uiState.value = updatedScreen.copy(
+                        isFeaturesLoading = false,
+                        features = data
+                    )
+                }
             } catch (e: Exception) {
-                // Ignore or handle
+                val current = _uiState.value as? FeaturesUiState.ListScreen
+                if (current != null) {
+                    _uiState.value = current.copy(
+                        isVersionLoading = false,
+                        isFeaturesLoading = false,
+                        errorMessage = e.message
+                    )
+                }
             }
         }
-    }
-
-    fun reload() {
-        loadFeatures()
     }
 
     /**
-     * Filters list based on search text input.
+     * Reload action on the mounted list screen
      */
-    fun onSearchQueryChanged(query: String) {
-        val currentState = _uiState.value as? FeaturesUiState.Success ?: return
-        val filtered = if (query.isBlank()) {
-            currentState.allFeatures
-        } else {
-            currentState.allFeatures.filter { feature ->
-                feature.title.contains(query, ignoreCase = true) ||
-                feature.description.contains(query, ignoreCase = true) ||
-                feature.tag.contains(query, ignoreCase = true)
-            }
-        }
+    fun reload() {
+        mountListAndLoad()
+    }
 
-        _uiState.update {
-            currentState.copy(
-                searchQuery = query,
-                filteredFeatures = filtered
-            )
-        }
+    /**
+     * Reset back to initial screen with code block
+     */
+    fun resetToInitial() {
+        _uiState.value = FeaturesUiState.Initial
     }
 }

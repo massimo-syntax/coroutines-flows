@@ -57,7 +57,6 @@ class MainActivity : ComponentActivity() {
 
             CoroutinesFlowsTheme(
                 appTheme = appState.currentTheme,
-                cornerRadius = appState.cornerRadiusValue
             ) {
                 // access to the app state directly from the composable
                 CompositionLocalProvider(LocalAppState provides appState) {

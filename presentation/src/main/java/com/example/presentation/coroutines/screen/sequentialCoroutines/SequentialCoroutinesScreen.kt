@@ -1,35 +1,39 @@
 package com.example.presentation.coroutines.screen.sequentialCoroutines
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.core.preferences.LocalAppState
+import com.example.domain.model.AndroidFeature
 
-/**
- * SequentialCoroutinesScreen
- * 
- * 1. Screen title in TopAppBar.
- * 2. Initial state with button to load data.
- * 3. Search text box.
- * 4. LazyColumn displaying minimal, modern rich cards.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SequentialCoroutinesScreen(
     modifier: Modifier = Modifier,
-    viewModel: FeaturesViewModel = hiltViewModel()
+    viewModel: FeaturesViewModel = hiltViewModel(),
+    onBackPressed: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -44,8 +48,22 @@ fun SequentialCoroutinesScreen(
                         fontWeight = FontWeight.Bold
                     )
                 },
+                navigationIcon = {
+                        IconButton(onClick = {
+                            if (uiState is FeaturesUiState.Initial){
+                                onBackPressed()
+                            } else { // FeaturesUiState.ListScreen
+                                viewModel.resetToInitial()
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back to Intro"
+                            )
+                        }
+                },
                 actions = {
-                    if (uiState is FeaturesUiState.Success) {
+                    if (uiState is FeaturesUiState.ListScreen) {
                         IconButton(onClick = { viewModel.reload() }) {
                             Icon(
                                 imageVector = Icons.Default.Refresh,
@@ -64,28 +82,17 @@ fun SequentialCoroutinesScreen(
         ) {
             when (val state = uiState) {
                 is FeaturesUiState.Initial -> {
-                    // Initial State: Welcoming view with button to load data
+                    // Screen 1: Initial view with code block & button
                     InitialLoadView(
-                        onLoadClick = { viewModel.loadFeatures() },
+                        onMountListClick = { viewModel.mountListAndLoad() },
                         modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                is FeaturesUiState.Loading -> {
-                    // Loading State: Simple spinner
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-
-                is FeaturesUiState.Success -> {
-                    // Loaded State: Search box + LazyColumn with minimal cards
-                    FeaturesListContent(
+                is FeaturesUiState.ListScreen -> {
+                    // Screen 2: Standalone Version Segment-Banner + FeaturesLazyList
+                    FeaturesListScreen(
                         state = state,
-                        onSearchChange = viewModel::onSearchQueryChanged,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
@@ -94,32 +101,59 @@ fun SequentialCoroutinesScreen(
     }
 }
 
+/**
+ * InitialLoadView
+ * Uses RoundedCornerShape(appState.cornerRadiusValue) for code card and button
+ */
 @Composable
 private fun InitialLoadView(
-    onLoadClick: () -> Unit,
+    onMountListClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val appState = LocalAppState.current
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+
     Column(
-        modifier = modifier.padding(24.dp),
+        modifier = modifier
+            .padding(24.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Surface(
-            shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier.size(72.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                Icon(
-                    imageVector = Icons.Default.CloudDownload,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(36.dp)
-                )
-            }
-        }
+        // Post-style formatted code block with appState corner shape
+        PostCodeBlock(
+            codeSnippet = """      
+                viewModelScope.launch {
+                    // Mount the list screen with both loaders active
+                    _uiState.value = FeaturesUiState.ListScreen(
+                        isVersionLoading = true,
+                        lastAndroidVersion = null,
+                        isFeaturesLoading = true,
+                        features = emptyList()
+                    )
+                    // Step 1: Sequential call to fetch newest versions & take last
+                    val versions = repository.getSequentialNewestAndroidVersions()
+                    val latestVersion = versions.last().title 
+    
+                    // State update 1: Version loaded (Version loader clears -> Version banner displays)   
+                    isVersionLoading = false,
+                    lastAndroidVersion = latestVersion
+                       
+                    // Step 2: Sequential call to fetch features (runs with version already visible)
+                    val data = repository.getSequentialFeaturesNewestAndroidVersions()
+    
+                    // State update 2: Features loaded (List loader clears -> cards display)
+                    isFeaturesLoading = false,
+                    features = data
+                }
+            """.trimIndent(),
+            shape = shape,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp)
+        )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "Latest Android Innovations",
@@ -138,8 +172,8 @@ private fun InitialLoadView(
         Spacer(modifier = Modifier.height(28.dp))
 
         Button(
-            onClick = onLoadClick,
-            shape = MaterialTheme.shapes.medium,
+            onClick = onMountListClick,
+            shape = shape,
             contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
         ) {
             Icon(imageVector = Icons.Default.CloudDownload, contentDescription = null)
@@ -149,51 +183,248 @@ private fun InitialLoadView(
     }
 }
 
+/**
+ * FeaturesListScreen
+ * Houses the Standalone Version Segment-Banner OUTSIDE the LazyColumn,
+ * then delegates rendering the items to FeaturesLazyList which takes just the List<AndroidFeature>.
+ */
 @Composable
-private fun FeaturesListContent(
-    state: FeaturesUiState.Success,
-    onSearchChange: (String) -> Unit,
+private fun FeaturesListScreen(
+    state: FeaturesUiState.ListScreen,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(16.dp),
+    val appState = LocalAppState.current
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Sticky/Top Item: Search Text Box
-        item(key = "search_box") {
-            OutlinedTextField(
-                value = state.searchQuery,
-                onValueChange = onSearchChange,
-                placeholder = { Text("Search features...") },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = null)
-                },
-                trailingIcon = {
-                    if (state.searchQuery.isNotEmpty()) {
-                        IconButton(onClick = { onSearchChange("") }) {
-                            Icon(imageVector = Icons.Default.Clear, contentDescription = "Clear")
-                        }
-                    }
-                },
-                singleLine = true,
-                shape = MaterialTheme.shapes.medium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp)
+        // [STANDALONE SEGMENT-BANNER] Sits outside the LazyColumn!
+        if (state.isVersionLoading) {
+            VersionLoadingIndicator(
+                shape = shape,
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else if (state.lastAndroidVersion != null) {
+            VersionSegmentBanner(
+                version = state.lastAndroidVersion,
+                shape = shape,
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
-        // LazyColumn Items: Minimal rich cards
+        // [LAZY LIST SECTION]
+        if (state.isFeaturesLoading) {
+            FeaturesListLoader(
+                version = state.lastAndroidVersion,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+        } else {
+            // Lazy list only takes the List<AndroidFeature> parameter!
+            FeaturesLazyList(
+                features = state.features,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+        }
+    }
+}
+
+/**
+ * FeaturesLazyList
+ * Directly takes features: List<AndroidFeature> as its parameter (not state.ListScreen).
+ */
+@Composable
+fun FeaturesLazyList(
+    features: List<AndroidFeature>,
+    modifier: Modifier = Modifier
+) {
+
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(bottom = 16.dp)
+    ) {
         items(
-            items = state.filteredFeatures,
+            items = features,
             key = { it.id }
         ) { feature ->
-            // Minimal Card in separate file: FeatureCard.kt
             FeatureCard(
                 feature = feature,
                 modifier = Modifier.fillMaxWidth()
             )
+        }
+    }
+}
+
+/**
+ * Standalone Segment-Banner for the newest Android Version
+ */
+@Composable
+fun VersionSegmentBanner(
+    version: String,
+    shape: RoundedCornerShape,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = shape,
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Last Android Version: $version",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Surface(
+                shape = shape,
+                color = MaterialTheme.colorScheme.primaryContainer
+            ) {
+                Text(
+                    text = "API $version",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Loader for the standalone Version segment-banner
+ */
+@Composable
+fun VersionLoadingIndicator(
+    shape: RoundedCornerShape,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = shape,
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(16.dp),
+                strokeWidth = 2.dp,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = "Fetching newest Android version...",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+/**
+ * Loader for the features list
+ */
+@Composable
+fun FeaturesListLoader(
+    version: String?,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(36.dp),
+            strokeWidth = 3.dp,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.height(14.dp))
+        Text(
+            text = if (version != null)
+                "Loading Android $version innovations..."
+            else
+                "Waiting for version, then loading features...",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/**
+ * PostCodeBlock: Formatted code card styled with the given shape
+ */
+@Composable
+fun PostCodeBlock(
+    codeSnippet: String,
+    shape: RoundedCornerShape,
+    modifier: Modifier = Modifier,
+    languageLabel: String = "Kotlin"
+) {
+    Surface(
+        shape = shape,
+        color = Color(0xFF1E1E2E),
+        modifier = modifier.border(
+            width = 1.dp,
+            color = Color(0xFF313244),
+            shape = shape
+        )
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFF181825))
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(modifier = Modifier.size(8.dp).clip(shape).background(Color(0xFFF38BA8)))
+                    Box(modifier = Modifier.size(8.dp).clip(shape).background(Color(0xFFF9E2AF)))
+                    Box(modifier = Modifier.size(8.dp).clip(shape).background(Color(0xFFA6E3A1)))
+                }
+                Text(
+                    text = languageLabel,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color(0xFFA6ADC8),
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(14.dp)
+            ) {
+                Text(
+                    text = codeSnippet,
+                    color = Color(0xFFCDD6F4),
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 12.5.sp,
+                    lineHeight = 18.sp
+                )
+            }
         }
     }
 }

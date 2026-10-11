@@ -8,24 +8,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.preferences.LocalAppState
 import com.example.domain.model.AndroidFeature
 
-/**
- * FeatureCard
- * 
- * Minimal, modern Material 3 card:
- * - Feature tag on top
- * - Bold title
- * - Description with developer specs & key APIs seamlessly in the body text
- */
 @Composable
 fun FeatureCard(
     feature: AndroidFeature,
     modifier: Modifier = Modifier
 ) {
+    val appState = LocalAppState.current
+    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+
     ElevatedCard(
         modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
+        shape = shape,
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),

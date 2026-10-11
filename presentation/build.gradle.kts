@@ -28,6 +28,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:preferences"))
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 

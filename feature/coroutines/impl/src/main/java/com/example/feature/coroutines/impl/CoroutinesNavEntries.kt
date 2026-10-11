@@ -20,6 +20,8 @@ fun EntryProviderScope<NavKey>.CoroutinesRoutes(backStack: NavBackStack<NavKey>)
         VeryComplicatedCoroutine()
     }
     entry<SequentialCoroutines>{
-        SequentialCoroutinesScreen()
+        SequentialCoroutinesScreen(onBackPressed = {
+            backStack.removeLastOrNull()
+        })
     }
 }

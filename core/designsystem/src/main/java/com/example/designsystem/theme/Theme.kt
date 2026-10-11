@@ -198,7 +198,6 @@ val EspressoGoldDarkColorScheme = darkColorScheme(
 @Composable
 fun CoroutinesFlowsTheme(
     appTheme: AppTheme,
-    cornerRadius: Int = 16,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when (appTheme) {
@@ -211,21 +210,9 @@ fun CoroutinesFlowsTheme(
         AppTheme.ESPRESSO_GOLD -> EspressoGoldDarkColorScheme
     }
 
-    // Best Practice: Dynamically calculate shapes and apply them to MaterialTheme.
-    // This allows components like ModernChip to use MaterialTheme.shapes.medium
-    // and automatically get the user-selected radius.
-    val shapes = Shapes(
-        extraSmall = RoundedCornerShape((cornerRadius / 4).dp),
-        small = RoundedCornerShape((cornerRadius / 2).dp),
-        medium = RoundedCornerShape(cornerRadius.dp),
-        large = RoundedCornerShape((cornerRadius * 1.5).toInt().dp),
-        extraLarge = RoundedCornerShape((cornerRadius * 2).dp)
-    )
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        shapes = shapes,
         content = content,
     )
 }
