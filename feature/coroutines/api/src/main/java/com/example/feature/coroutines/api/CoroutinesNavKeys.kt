@@ -11,3 +11,6 @@ data object VeryComplicatedCoroutine : NavKey
 
 @Serializable
 data object SequentialCoroutines : NavKey
+
+@Serializable
+data object AddAgentSkills : NavKey

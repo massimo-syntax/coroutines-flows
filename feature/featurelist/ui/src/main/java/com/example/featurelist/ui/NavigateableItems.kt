@@ -1,6 +1,7 @@
 package com.example.featurelist.ui
 
 import androidx.navigation3.runtime.NavKey
+import com.example.feature.coroutines.api.AddAgentSkills
 import com.example.feature.coroutines.api.SequentialCoroutines
 import com.example.feature.coroutines.api.VeryComplicatedCoroutine
 import com.example.feature.coroutines.api.VerySimpleCoroutine
@@ -35,7 +36,7 @@ data class FeatureItem(
      val type: SelectedCategory,
      val navKey: NavKey
 )
-val navigateableItems = listOf(
+val navigableItems = listOf(
 
     // coroutines
     FeatureItem(
@@ -52,6 +53,13 @@ val navigateableItems = listOf(
         type = SelectedCategory.Coroutines,
         title = "Sequential Coroutines",
         navKey = SequentialCoroutines
+    ),
+    FeatureItem(
+        type = SelectedCategory.Coroutines,
+        title = "Add Agent Skills",
+        subtitle = "Coroutines Flow",
+        description = "Sample data flow created using new-data-flow skill",
+        navKey = AddAgentSkills
     ),
 
     // flows

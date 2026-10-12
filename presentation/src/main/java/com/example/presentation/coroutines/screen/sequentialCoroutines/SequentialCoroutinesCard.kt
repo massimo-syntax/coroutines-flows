@@ -11,13 +11,16 @@ import androidx.compose.ui.unit.sp
 import com.example.core.preferences.LocalAppState
 import com.example.domain.model.AndroidFeature
 
+/**
+ * Card component for displaying an individual feature.
+ */
 @Composable
-fun FeatureCard(
+fun SequentialCoroutinesCard(
     feature: AndroidFeature,
     modifier: Modifier = Modifier
 ) {
     val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
 
     ElevatedCard(
         modifier = modifier,
@@ -34,7 +37,6 @@ fun FeatureCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Feature Tag on top
             Text(
                 text = feature.tag.uppercase(),
                 style = MaterialTheme.typography.labelSmall,
@@ -45,7 +47,6 @@ fun FeatureCard(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // Title
             Text(
                 text = feature.title,
                 style = MaterialTheme.typography.titleMedium,
@@ -55,7 +56,6 @@ fun FeatureCard(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // Description: clean readable body text
             Text(
                 text = feature.description,
                 style = MaterialTheme.typography.bodyMedium,

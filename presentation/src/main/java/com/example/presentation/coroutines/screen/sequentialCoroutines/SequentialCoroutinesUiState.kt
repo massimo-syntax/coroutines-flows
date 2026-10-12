@@ -2,11 +2,11 @@ package com.example.presentation.coroutines.screen.sequentialCoroutines
 
 import com.example.domain.model.AndroidFeature
 
-sealed interface FeaturesUiState {
+sealed interface SequentialCoroutinesUiState {
     /**
      * Initial screen with post-style code block and mount button
      */
-    data object Initial : FeaturesUiState
+    data object Initial : SequentialCoroutinesUiState
 
     /**
      * Mounted screen with the list containing independent version and list loaders
@@ -17,5 +17,5 @@ sealed interface FeaturesUiState {
         val isFeaturesLoading: Boolean = true,
         val features: List<AndroidFeature> = emptyList(),
         val errorMessage: String? = null
-    ) : FeaturesUiState
+    ) : SequentialCoroutinesUiState
 }

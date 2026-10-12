@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.example.feature.coroutines.api.AddAgentSkills
 import com.example.feature.coroutines.api.SequentialCoroutines
 import com.example.feature.coroutines.api.VeryComplicatedCoroutine
 import com.example.feature.coroutines.api.VerySimpleCoroutine
+import com.example.presentation.coroutines.screen.addagentskills.AddAgentSkillsScreen
 import com.example.presentation.coroutines.screen.sequentialCoroutines.SequentialCoroutinesScreen
 import com.example.presentation.coroutines.screen.simplecoroutine.SimpleCoroutineScreen
 import com.example.presentation.coroutines.screen.verycomplicatedcoroutine.VeryComplicatedCoroutine
@@ -21,6 +23,11 @@ fun EntryProviderScope<NavKey>.CoroutinesRoutes(backStack: NavBackStack<NavKey>)
     }
     entry<SequentialCoroutines>{
         SequentialCoroutinesScreen(onBackPressed = {
+            backStack.removeLastOrNull()
+        })
+    }
+    entry<AddAgentSkills>{
+        AddAgentSkillsScreen(onBackPressed = {
             backStack.removeLastOrNull()
         })
     }

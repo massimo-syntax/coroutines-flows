@@ -47,7 +47,7 @@ fun ModernChip(
     modifier: Modifier = Modifier
 ) {
     val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
 
     val transition = updateTransition(
         targetState = selected,

@@ -28,11 +28,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.preferences.LocalAppState
 import com.example.domain.model.AndroidFeature
 
+/**
+ * Sequential coroutines sample screen.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SequentialCoroutinesScreen(
     modifier: Modifier = Modifier,
-    viewModel: FeaturesViewModel = hiltViewModel(),
+    viewModel: SequentialCoroutinesViewModel = hiltViewModel(),
     onBackPressed: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -49,21 +52,21 @@ fun SequentialCoroutinesScreen(
                     )
                 },
                 navigationIcon = {
-                        IconButton(onClick = {
-                            if (uiState is FeaturesUiState.Initial){
-                                onBackPressed()
-                            } else { // FeaturesUiState.ListScreen
-                                viewModel.resetToInitial()
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back to Intro"
-                            )
+                    IconButton(onClick = {
+                        if (uiState is SequentialCoroutinesUiState.Initial) {
+                            onBackPressed()
+                        } else {
+                            viewModel.resetToInitial()
                         }
+                    }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
                 },
                 actions = {
-                    if (uiState is FeaturesUiState.ListScreen) {
+                    if (uiState is SequentialCoroutinesUiState.ListScreen) {
                         IconButton(onClick = { viewModel.reload() }) {
                             Icon(
                                 imageVector = Icons.Default.Refresh,
@@ -81,16 +84,14 @@ fun SequentialCoroutinesScreen(
                 .padding(innerPadding)
         ) {
             when (val state = uiState) {
-                is FeaturesUiState.Initial -> {
-                    // Screen 1: Initial view with code block & button
+                is SequentialCoroutinesUiState.Initial -> {
                     InitialLoadView(
                         onMountListClick = { viewModel.mountListAndLoad() },
                         modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                is FeaturesUiState.ListScreen -> {
-                    // Screen 2: Standalone Version Segment-Banner + FeaturesLazyList
+                is SequentialCoroutinesUiState.ListScreen -> {
                     FeaturesListScreen(
                         state = state,
                         modifier = Modifier.fillMaxSize()
@@ -102,8 +103,7 @@ fun SequentialCoroutinesScreen(
 }
 
 /**
- * InitialLoadView
- * Uses RoundedCornerShape(appState.cornerRadiusValue) for code card and button
+ * Initial view displaying code snippet and load trigger.
  */
 @Composable
 private fun InitialLoadView(
@@ -111,7 +111,7 @@ private fun InitialLoadView(
     modifier: Modifier = Modifier
 ) {
     val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
 
     Column(
         modifier = modifier
@@ -120,34 +120,27 @@ private fun InitialLoadView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Post-style formatted code block with appState corner shape
         PostCodeBlock(
             codeSnippet = """      
                 viewModelScope.launch {
-                    // Mount the list screen with both loaders active
-                    _uiState.value = FeaturesUiState.ListScreen(
+                    _uiState.value = SequentialCoroutinesUiState.ListScreen(
                         isVersionLoading = true,
                         lastAndroidVersion = null,
                         isFeaturesLoading = true,
                         features = emptyList()
                     )
-                    // Step 1: Sequential call to fetch newest versions & take last
                     val versions = repository.getSequentialNewestAndroidVersions()
                     val latestVersion = versions.last().title 
-    
-                    // State update 1: Version loaded (Version loader clears -> Version banner displays)   
+
                     isVersionLoading = false,
                     lastAndroidVersion = latestVersion
-                       
-                    // Step 2: Sequential call to fetch features (runs with version already visible)
+
                     val data = repository.getSequentialFeaturesNewestAndroidVersions()
-    
-                    // State update 2: Features loaded (List loader clears -> cards display)
+
                     isFeaturesLoading = false,
                     features = data
                 }
             """.trimIndent(),
-            shape = shape,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp)
@@ -184,39 +177,30 @@ private fun InitialLoadView(
 }
 
 /**
- * FeaturesListScreen
- * Houses the Standalone Version Segment-Banner OUTSIDE the LazyColumn,
- * then delegates rendering the items to FeaturesLazyList which takes just the List<AndroidFeature>.
+ * List screen container.
  */
 @Composable
 private fun FeaturesListScreen(
-    state: FeaturesUiState.ListScreen,
+    state: SequentialCoroutinesUiState.ListScreen,
     modifier: Modifier = Modifier
 ) {
-    val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // [STANDALONE SEGMENT-BANNER] Sits outside the LazyColumn!
         if (state.isVersionLoading) {
             VersionLoadingIndicator(
-                shape = shape,
                 modifier = Modifier.fillMaxWidth()
             )
         } else if (state.lastAndroidVersion != null) {
             VersionSegmentBanner(
                 version = state.lastAndroidVersion,
-                shape = shape,
                 modifier = Modifier.fillMaxWidth()
             )
         }
 
-        // [LAZY LIST SECTION]
         if (state.isFeaturesLoading) {
             FeaturesListLoader(
                 version = state.lastAndroidVersion,
@@ -225,7 +209,6 @@ private fun FeaturesListScreen(
                     .weight(1f)
             )
         } else {
-            // Lazy list only takes the List<AndroidFeature> parameter!
             FeaturesLazyList(
                 features = state.features,
                 modifier = Modifier
@@ -237,15 +220,13 @@ private fun FeaturesListScreen(
 }
 
 /**
- * FeaturesLazyList
- * Directly takes features: List<AndroidFeature> as its parameter (not state.ListScreen).
+ * Lazy column of feature cards.
  */
 @Composable
 fun FeaturesLazyList(
     features: List<AndroidFeature>,
     modifier: Modifier = Modifier
 ) {
-
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -255,7 +236,7 @@ fun FeaturesLazyList(
             items = features,
             key = { it.id }
         ) { feature ->
-            FeatureCard(
+            SequentialCoroutinesCard(
                 feature = feature,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -264,14 +245,15 @@ fun FeaturesLazyList(
 }
 
 /**
- * Standalone Segment-Banner for the newest Android Version
+ * Version banner component.
  */
 @Composable
 fun VersionSegmentBanner(
     version: String,
-    shape: RoundedCornerShape,
     modifier: Modifier = Modifier
 ) {
+    val appState = LocalAppState.current
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
     Surface(
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
@@ -305,13 +287,14 @@ fun VersionSegmentBanner(
 }
 
 /**
- * Loader for the standalone Version segment-banner
+ * Version banner loader component.
  */
 @Composable
 fun VersionLoadingIndicator(
-    shape: RoundedCornerShape,
     modifier: Modifier = Modifier
 ) {
+    val appState = LocalAppState.current
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
     Surface(
         shape = shape,
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
@@ -337,7 +320,7 @@ fun VersionLoadingIndicator(
 }
 
 /**
- * Loader for the features list
+ * Features list loader component.
  */
 @Composable
 fun FeaturesListLoader(
@@ -367,15 +350,17 @@ fun FeaturesListLoader(
 }
 
 /**
- * PostCodeBlock: Formatted code card styled with the given shape
+ * Formatted code block card component.
  */
 @Composable
 fun PostCodeBlock(
     codeSnippet: String,
-    shape: RoundedCornerShape,
     modifier: Modifier = Modifier,
     languageLabel: String = "Kotlin"
 ) {
+    val appState = LocalAppState.current
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
+
     Surface(
         shape = shape,
         color = Color(0xFF1E1E2E),

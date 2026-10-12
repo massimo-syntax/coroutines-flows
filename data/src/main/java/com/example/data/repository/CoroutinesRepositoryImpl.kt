@@ -21,6 +21,9 @@ class CoroutinesRepositoryImpl @Inject constructor(
     override suspend fun getSequentialFeaturesNewestAndroidVersions(): List<AndroidFeature> =
         secureNetworkRequest { apiService.getSequentialFeaturesNewestAndroidVersions() }
 
+    override suspend fun addAgentSkills(): List<MyData> =
+        secureNetworkRequest { apiService.addAgentSkills().toMyData() }
+
     override suspend fun getError() {
         // get error does not return data, is for retrofit to return an error
         // so is not needed to have variance of secureNetworkRequest(()->Unit) function

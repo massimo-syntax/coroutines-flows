@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.featurelist.ui.FeatureItem
 import com.example.featurelist.ui.SelectedCategory
-import com.example.featurelist.ui.navigateableItems
+import com.example.featurelist.ui.navigableItems
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-// FeaturesViewModel.kt
+// ListScreenViewModel.kt
 class ListScreenViewModel : ViewModel() {
 
     private val _query = MutableStateFlow("")
@@ -28,7 +28,7 @@ class ListScreenViewModel : ViewModel() {
             query to category
         }
             .map { (query, category) ->
-                val items = navigateableItems.filter { feature ->
+                val items = navigableItems.filter { feature ->
                     val matchesCategory =
                         category == SelectedCategory.All || feature.type == category
                     val matchesQuery = query.isBlank() ||
@@ -44,7 +44,7 @@ class ListScreenViewModel : ViewModel() {
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = UiState(navigateableItems, SelectedCategory.All)
+                initialValue = UiState(navigableItems, SelectedCategory.All)
             )
 
     fun onQueryChanged(newQuery: String) {

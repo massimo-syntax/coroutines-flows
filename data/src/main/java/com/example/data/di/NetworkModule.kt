@@ -1,8 +1,8 @@
 package com.example.data.di
 
-import com.example.data.remote.HttpsWwwServerCom
 import com.example.data.remote.MockApiService
 import com.example.data.remote.MockInterceptor
+import com.example.data.remote.server.HttpsWwwServerCom
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

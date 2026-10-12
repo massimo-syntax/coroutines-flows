@@ -7,5 +7,6 @@ interface CoroutinesRepository {
     suspend fun getData(): List<MyData>
     suspend fun getSequentialNewestAndroidVersions(): List<MyData>
     suspend fun getSequentialFeaturesNewestAndroidVersions(): List<AndroidFeature>
+    suspend fun addAgentSkills(): List<MyData>
     suspend fun getError()
 }

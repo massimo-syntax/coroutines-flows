@@ -53,10 +53,6 @@ fun NavigationLazyColumn(
     navigateTo: (navKey: NavKey) -> Unit,
     listState: UiState
 ) {
-    val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
-
-
     // for now category is selected, the list is already filtered in the viewmodel
     // so the check is enough if notEmpty()
     val coroutinesItems = listState.itemsList.filter { it.type == SelectedCategory.Coroutines }
@@ -87,7 +83,6 @@ fun NavigationLazyColumn(
                     description = "Start lightweight coroutines without blocking threads. Returns Job or Deferred<T>.",
                     imageUrl = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150",
                     tags = listOf("Job", "Deferred", "Scope"),
-                    shape = shape,
                     onClick = { navigateTo(it.navKey) }
                 )
             }
@@ -115,7 +110,6 @@ fun NavigationLazyColumn(
                     description = "Start lightweight coroutines without blocking threads. Returns Job or Deferred<T>.",
                     imageUrl = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150",
                     tags = listOf("Job", "Deferred", "Scope"),
-                    shape = shape,
                     onClick = { navigateTo(it.navKey) }
                 )
             }
@@ -135,7 +129,7 @@ private fun SectionHeader(
     badgeColor: Color
 ) {
     val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -183,9 +177,10 @@ private fun FancyListItem(
     description: String,
     imageUrl: String,
     tags: List<String>,
-    shape: Shape,
     onClick: () -> Unit
 ) {
+    val appState = LocalAppState.current
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
     var isFavorite by remember { mutableStateOf(false) }
 
     ElevatedCard(

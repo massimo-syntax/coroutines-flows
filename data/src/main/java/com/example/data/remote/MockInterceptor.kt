@@ -1,6 +1,12 @@
 package com.example.data.remote
 
 import android.util.Log
+import com.example.data.remote.server.ADD_AGENT_SKILLS_COROUTINES
+import com.example.data.remote.server.DATA
+import com.example.data.remote.server.ERROR
+import com.example.data.remote.server.HttpsWwwServerCom
+import com.example.data.remote.server.SEQUENTIAL_GET_FEATURES_NEWEST_ANDROID_VERSIONS
+import com.example.data.remote.server.SEQUENTIAL_GET_NEWEST_ANDROID_VERSIONS
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Protocol
@@ -34,6 +40,11 @@ class MockInterceptor(
             }
             // then features of it
             SEQUENTIAL_GET_FEATURES_NEWEST_ANDROID_VERSIONS-> {
+                response = server.routeResponse( path )
+                code = 200
+            }
+
+            ADD_AGENT_SKILLS_COROUTINES -> {
                 response = server.routeResponse( path )
                 code = 200
             }

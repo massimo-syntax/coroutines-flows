@@ -43,7 +43,7 @@ fun MaterialOutlinedTextField(
     modifier: Modifier = Modifier
 ) {
     val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
 
     OutlinedTextField(
         value = query,
@@ -81,7 +81,7 @@ fun ModernSearchTextField(
 ) {
     val focusManager = LocalFocusManager.current
     val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
 
     Surface(
         shape = shape,

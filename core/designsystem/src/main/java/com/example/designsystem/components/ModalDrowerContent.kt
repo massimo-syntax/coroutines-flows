@@ -182,7 +182,7 @@ fun DrawerHeader(
     onClose: () -> Unit = {}
 ) {
     val appState = LocalAppState.current
-    val shape = RoundedCornerShape(appState.cornerRadiusValue)
+    val shape = RoundedCornerShape(appState.cornerRadiusValue.dp)
 
     Column(
         modifier = Modifier
