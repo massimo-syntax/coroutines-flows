@@ -5,10 +5,10 @@ enum class AppTheme(val displayName: String) {
     AURORA_TEAL("Aurora Teal"),
     SUNSET_CORAL("Sunset Coral"),
     NORDIC_SAPPHIRE("Nordic Sapphire"),
-    CYBER_VIOLET("Cyber Violet"),
+    AURORA_DARK("Aurora Teal Dark"),
     TOKYO_CYAN("Tokyo Cyan"),
     ESPRESSO_GOLD("Espresso Gold");
 
     val isDark: Boolean
-        get() = this in listOf(CYBER_VIOLET, TOKYO_CYAN, ESPRESSO_GOLD)
+        get() = this in listOf(AURORA_DARK, TOKYO_CYAN, ESPRESSO_GOLD)
 }

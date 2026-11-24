@@ -5,13 +5,17 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.example.feature.coroutines.api.AddAgentSkills
+import com.example.feature.coroutines.api.RetryExponentialCoroutines
 import com.example.feature.coroutines.api.SequentialCoroutines
+import com.example.feature.coroutines.api.TimeoutCoroutine
 import com.example.feature.coroutines.api.VeryComplicatedCoroutine
 import com.example.feature.coroutines.api.VerySimpleCoroutine
 import com.example.presentation.coroutines.screen.addagentskills.AddAgentSkillsScreen
+import com.example.presentation.coroutines.screen.exponentialretry.NetworkRetryScreen
 import com.example.presentation.coroutines.screen.sequentialCoroutines.SequentialCoroutinesScreen
 import com.example.presentation.coroutines.screen.simplecoroutine.SimpleCoroutineScreen
 import com.example.presentation.coroutines.screen.verycomplicatedcoroutine.VeryComplicatedCoroutine
+import com.example.presentation.coroutines.screen.timeout.TimeoutShowcaseScreen
 
 @Composable
 fun EntryProviderScope<NavKey>.CoroutinesRoutes(backStack: NavBackStack<NavKey>) {
@@ -28,6 +32,16 @@ fun EntryProviderScope<NavKey>.CoroutinesRoutes(backStack: NavBackStack<NavKey>)
     }
     entry<AddAgentSkills>{
         AddAgentSkillsScreen(onBackPressed = {
+            backStack.removeLastOrNull()
+        })
+    }
+    entry<TimeoutCoroutine>{
+        TimeoutShowcaseScreen(onBackPressed = {
+            backStack.removeLastOrNull()
+        })
+    }
+    entry<RetryExponentialCoroutines>{
+        NetworkRetryScreen(onBackPressed = {
             backStack.removeLastOrNull()
         })
     }

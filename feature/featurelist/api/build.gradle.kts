@@ -26,4 +26,6 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.kotlinx.serialization.core)
 
+    implementation(project(":feature:coroutines:api"))
+    implementation(project(":feature:flows:api"))
 }

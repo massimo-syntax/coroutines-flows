@@ -9,4 +9,5 @@ interface CoroutinesRepository {
     suspend fun getSequentialFeaturesNewestAndroidVersions(): List<AndroidFeature>
     suspend fun addAgentSkills(): List<MyData>
     suspend fun getError()
+    suspend fun delayTimeout(delayMs: Long): String
 }

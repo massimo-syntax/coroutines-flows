@@ -1,14 +1,12 @@
-package com.example.coroutinesflows.designsystem.theme
+package com.example.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
 import com.example.core.preferences.model.AppTheme
+import com.example.coroutinesflows.designsystem.theme.Typography
 
 
 private val DarkColorScheme = darkColorScheme(
@@ -63,7 +61,7 @@ val AuroraTealLightColorScheme = lightColorScheme(
     outline = AuroraTealOutline,
     outlineVariant = AuroraTealOutlineVariant,
     error = AuroraTealError,
-    onError = AuroraTealOnError
+    onError = AuroraTealOnError,
 )
 
 val SunsetCoralLightColorScheme = lightColorScheme(
@@ -119,29 +117,29 @@ val NordicSapphireLightColorScheme = lightColorScheme(
 // -------------------------------------------------------------
 // 2. Dark Schemes
 // -------------------------------------------------------------
-val CyberVioletDarkColorScheme = darkColorScheme(
-    primary = CyberVioletPrimary,
-    onPrimary = CyberVioletOnPrimary,
-    primaryContainer = CyberVioletPrimaryContainer,
-    onPrimaryContainer = CyberVioletOnPrimaryContainer,
-    secondary = CyberVioletSecondary,
-    onSecondary = CyberVioletOnSecondary,
-    secondaryContainer = CyberVioletSecondaryContainer,
-    onSecondaryContainer = CyberVioletOnSecondaryContainer,
-    tertiary = CyberVioletTertiary,
-    onTertiary = CyberVioletOnTertiary,
-    tertiaryContainer = CyberVioletTertiaryContainer,
-    onTertiaryContainer = CyberVioletOnTertiaryContainer,
-    background = CyberVioletBackground,
-    onBackground = CyberVioletOnBackground,
-    surface = CyberVioletSurface,
-    onSurface = CyberVioletOnSurface,
-    surfaceVariant = CyberVioletSurfaceVariant,
-    onSurfaceVariant = CyberVioletOnSurfaceVariant,
-    outline = CyberVioletOutline,
-    outlineVariant = CyberVioletOutlineVariant,
-    error = CyberVioletError,
-    onError = CyberVioletOnError
+val AuroraTealDarkColorScheme = darkColorScheme(
+    primary = AuroraTealDarkPrimary,
+    onPrimary = AuroraTealDarkOnPrimary,
+    primaryContainer = AuroraTealDarkPrimaryContainer,
+    onPrimaryContainer = AuroraTealDarkOnPrimaryContainer,
+    secondary = AuroraTealDarkSecondary,
+    onSecondary = AuroraTealDarkOnSecondary,
+    secondaryContainer = AuroraTealDarkSecondaryContainer,
+    onSecondaryContainer = AuroraTealDarkOnSecondaryContainer,
+    tertiary = AuroraTealDarkTertiary,
+    onTertiary = AuroraTealDarkOnTertiary,
+    tertiaryContainer = AuroraTealDarkTertiaryContainer,
+    onTertiaryContainer = AuroraTealDarkOnTertiaryContainer,
+    background = AuroraTealDarkBackground,
+    onBackground = AuroraTealDarkOnBackground,
+    surface = AuroraTealDarkSurface,
+    onSurface = AuroraTealDarkOnSurface,
+    surfaceVariant = AuroraTealDarkSurfaceVariant,
+    onSurfaceVariant = AuroraTealDarkOnSurfaceVariant,
+    outline = AuroraTealDarkOutline,
+    outlineVariant = AuroraTealDarkOutlineVariant,
+    error = AuroraTealDarkError,
+    onError = AuroraTealDarkOnError
 )
 
 val TokyoCyanDarkColorScheme = darkColorScheme(
@@ -205,7 +203,7 @@ fun CoroutinesFlowsTheme(
         AppTheme.AURORA_TEAL -> AuroraTealLightColorScheme
         AppTheme.SUNSET_CORAL -> SunsetCoralLightColorScheme
         AppTheme.NORDIC_SAPPHIRE -> NordicSapphireLightColorScheme
-        AppTheme.CYBER_VIOLET -> CyberVioletDarkColorScheme
+        AppTheme.AURORA_DARK -> AuroraTealDarkColorScheme
         AppTheme.TOKYO_CYAN -> TokyoCyanDarkColorScheme
         AppTheme.ESPRESSO_GOLD -> EspressoGoldDarkColorScheme
     }

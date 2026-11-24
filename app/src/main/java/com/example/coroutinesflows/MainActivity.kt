@@ -11,9 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.core.preferences.LocalAppState
 import com.example.core.preferences.datasourcedatastore.PreferencesDataSource
-import com.example.core.preferences.model.AppTheme
 import com.example.core.preferences.rememberAppState
-import com.example.coroutinesflows.designsystem.theme.CoroutinesFlowsTheme
+import com.example.designsystem.theme.CoroutinesFlowsTheme
 import com.example.navigation.Nav
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject

@@ -14,3 +14,10 @@ data object SequentialCoroutines : NavKey
 
 @Serializable
 data object AddAgentSkills : NavKey
+
+@Serializable
+data object TimeoutCoroutine : NavKey
+
+
+@Serializable
+data object RetryExponentialCoroutines : NavKey

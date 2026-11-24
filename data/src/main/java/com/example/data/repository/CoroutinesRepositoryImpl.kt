@@ -6,6 +6,7 @@ import com.example.domain.model.AndroidFeature
 import com.example.domain.model.MyData
 import com.example.domain.repository.CoroutinesRepository
 import jakarta.inject.Inject
+import kotlinx.coroutines.delay
 
 class CoroutinesRepositoryImpl @Inject constructor(
     private val apiService: MockApiService
@@ -28,6 +29,11 @@ class CoroutinesRepositoryImpl @Inject constructor(
         // get error does not return data, is for retrofit to return an error
         // so is not needed to have variance of secureNetworkRequest(()->Unit) function
         secureNetworkRequest { apiService.getError() }
+    }
+
+    override suspend fun delayTimeout(delayMs: Long): String {
+        delay(delayMs)
+        return "200 OK · Payload synced in ${delayMs} ms"
     }
 }
 

@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import coil.compose.AsyncImage
 import com.example.core.preferences.LocalAppState
+import com.example.featurelist.api.SelectedCategory
 import com.example.featurelist.ui.viewmodel.UiState
 
 @Composable

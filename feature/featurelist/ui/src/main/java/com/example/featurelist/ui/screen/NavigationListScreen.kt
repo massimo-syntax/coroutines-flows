@@ -33,8 +33,8 @@ import com.example.designsystem.components.ModalDrawerContent
 import com.example.designsystem.components.ModernAppBar
 import com.example.designsystem.components.ModernChip
 import com.example.designsystem.components.ModernSearchTextField
+import com.example.featurelist.api.SelectedCategory
 import com.example.featurelist.ui.NavigationLazyColumn
-import com.example.featurelist.ui.SelectedCategory
 import com.example.featurelist.ui.viewmodel.ListScreenViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue

@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
 
     // particular navigation pattern of this app
+    implementation(project(":feature:featurelist:api"))
     implementation(project(":feature:myfeature:api"))
     implementation(project(":feature:coroutines:api"))
     implementation(project(":feature:flows:api"))

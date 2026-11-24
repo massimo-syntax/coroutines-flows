@@ -1,4 +1,4 @@
-package com.example.coroutinesflows.designsystem.theme
+package com.example.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -12,7 +12,14 @@ val Pink40 = Color(0xFF7D5260)
 
 // NEW COLORS
 
-//import androidx.compose.ui.graphics.Color
+// Material theme does not provide the color: success
+// Light mode
+val Success = Color(0xFF059669)
+val OnSuccess = Color(0xFFFFFFFF)
+
+// Dark mode
+val SuccessDark = Color(0xFF10B981)
+val OnSuccessDark = Color(0xFF00382A)
 
 /**
  * Custom Color definitions for the 6 Jetpack Compose Material 3 Themes.
@@ -23,33 +30,33 @@ val Pink40 = Color(0xFF7D5260)
 // Theme: Aurora Teal (LIGHT)
 // Vivid Emerald & Electric Mint
 // ==========================================
-val AuroraTealPrimary = Color(0xFF00897B)
+// Light mode
+val AuroraTealPrimary = Color(0xFF6366F1)
 val AuroraTealOnPrimary = Color(0xFFFFFFFF)
-val AuroraTealPrimaryContainer = Color(0xFF80F2DC)
-val AuroraTealOnPrimaryContainer = Color(0xFF002D26)
+val AuroraTealPrimaryContainer = Color(0xFFE0E7FF)
+val AuroraTealOnPrimaryContainer = Color(0xFF1E1B4B)
 
-val AuroraTealSecondary = Color(0xFF0284C7)
+val AuroraTealSecondary = Color(0xFF0EA5E9)
 val AuroraTealOnSecondary = Color(0xFFFFFFFF)
-val AuroraTealSecondaryContainer = Color(0xFFBAE6FD)
-val AuroraTealOnSecondaryContainer = Color(0xFF032B45)
+val AuroraTealSecondaryContainer = Color(0xFFE0F2FE)
+val AuroraTealOnSecondaryContainer = Color(0xFF0C4A6E) // derived
 
-val AuroraTealTertiary = Color(0xFF7C3AED)
-val AuroraTealOnTertiary = Color(0xFFFFFFFF)
-val AuroraTealTertiaryContainer = Color(0xFFDDD6FE)
-val AuroraTealOnTertiaryContainer = Color(0xFF2E1065)
+val AuroraTealTertiary = Color(0xFF10B981)
+val AuroraTealOnTertiary = Color(0xFF00382A) // derived
+val AuroraTealTertiaryContainer = Color(0xFFD1FAE5)
+val AuroraTealOnTertiaryContainer = Color(0xFF064E3B) // derived
 
-val AuroraTealBackground = Color(0xFFF0FDF8)
+val AuroraTealBackground = Color(0xFFF8FAFC)
 val AuroraTealOnBackground = Color(0xFF0F172A)
-
-val AuroraTealSurface = Color(0xFFFFFFFF)
+val AuroraTealSurface = Color(0xFFF8FAFC)
 val AuroraTealOnSurface = Color(0xFF0F172A)
-val AuroraTealSurfaceVariant = Color(0xFFE0F2FE)
-val AuroraTealOnSurfaceVariant = Color(0xFF334155)
+val AuroraTealSurfaceVariant = Color(0xFFF1F5F9)
+val AuroraTealOnSurfaceVariant = Color(0xFF334155) // derived
 
-val AuroraTealOutline = Color(0xFF0EA5E9)
-val AuroraTealOutlineVariant = Color(0xFFBAE6FD)
+val AuroraTealOutline = Color(0xFF64748B) // derived
+val AuroraTealOutlineVariant = Color(0xFFCBD5E1) // derived
 
-val AuroraTealError = Color(0xFFDC2626)
+val AuroraTealError = Color(0xFFEF4444)
 val AuroraTealOnError = Color(0xFFFFFFFF)
 
 // ==========================================
@@ -122,34 +129,35 @@ val NordicSapphireOnError = Color(0xFFFFFFFF)
 // Theme: Cyber Violet (DARK)
 // Neon Magenta & Glowing Cyber Iris
 // ==========================================
-val CyberVioletPrimary = Color(0xFFE879F9)
-val CyberVioletOnPrimary = Color(0xFF2A004A)
-val CyberVioletPrimaryContainer = Color(0xFF86198F)
-val CyberVioletOnPrimaryContainer = Color(0xFFFDF4FF)
+// Dark mode
+// Dark mode
+val AuroraTealDarkPrimary = Color(0xFF818CF8)
+val AuroraTealDarkOnPrimary = Color(0xFF1E1B4B)
+val AuroraTealDarkPrimaryContainer = Color(0xFF312E81)
+val AuroraTealDarkOnPrimaryContainer = Color(0xFFE0E7FF) // derived
 
-val CyberVioletSecondary = Color(0xFF818CF8)
-val CyberVioletOnSecondary = Color(0xFF1E1B4B)
-val CyberVioletSecondaryContainer = Color(0xFF3730A3)
-val CyberVioletOnSecondaryContainer = Color(0xFFE0E7FF)
+val AuroraTealDarkSecondary = Color(0xFF38BDF8)
+val AuroraTealDarkOnSecondary = Color(0xFF082F49) // derived
+val AuroraTealDarkSecondaryContainer = Color(0xFF0C4A6E) // derived
+val AuroraTealDarkOnSecondaryContainer = Color(0xFFE0F2FE) // derived
 
-val CyberVioletTertiary = Color(0xFF38BDF8)
-val CyberVioletOnTertiary = Color(0xFF082F49)
-val CyberVioletTertiaryContainer = Color(0xFF0369A1)
-val CyberVioletOnTertiaryContainer = Color(0xFFE0F2FE)
+val AuroraTealDarkTertiary = Color(0xFF34D399)
+val AuroraTealDarkOnTertiary = Color(0xFF00382A) // derived
+val AuroraTealDarkTertiaryContainer = Color(0xFF064E3B) // derived
+val AuroraTealDarkOnTertiaryContainer = Color(0xFFD1FAE5) // derived
 
-val CyberVioletBackground = Color(0xFF0F0A1C)
-val CyberVioletOnBackground = Color(0xFFF5F3FF)
+val AuroraTealDarkBackground = Color(0xFF0F172A)
+val AuroraTealDarkOnBackground = Color(0xFFF8FAFC)
+val AuroraTealDarkSurface = Color(0xFF0F172A)
+val AuroraTealDarkOnSurface = Color(0xFFF8FAFC)
+val AuroraTealDarkSurfaceVariant = Color(0xFF1E293B)
+val AuroraTealDarkOnSurfaceVariant = Color(0xFFCBD5E1) // derived
 
-val CyberVioletSurface = Color(0xFF18102A)
-val CyberVioletOnSurface = Color(0xFFF5F3FF)
-val CyberVioletSurfaceVariant = Color(0xFF2E1F4D)
-val CyberVioletOnSurfaceVariant = Color(0xFFDDD6FE)
+val AuroraTealDarkOutline = Color(0xFF94A3B8) // derived
+val AuroraTealDarkOutlineVariant = Color(0xFF475569) // derived
 
-val CyberVioletOutline = Color(0xFFA855F7)
-val CyberVioletOutlineVariant = Color(0xFF581C87)
-
-val CyberVioletError = Color(0xFFF87171)
-val CyberVioletOnError = Color(0xFF450A0A)
+val AuroraTealDarkError = Color(0xFFF87171)
+val AuroraTealDarkOnError = Color(0xFF450A0A) // derived
 
 // ==========================================
 // Theme: Tokyo Cyan (DARK)

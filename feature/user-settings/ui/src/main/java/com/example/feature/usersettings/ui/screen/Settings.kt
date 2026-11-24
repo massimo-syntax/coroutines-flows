@@ -59,38 +59,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.preferences.LocalAppState
-import com.example.coroutinesflows.designsystem.theme.AuroraTealOnSurface
-import com.example.coroutinesflows.designsystem.theme.AuroraTealPrimary
-import com.example.coroutinesflows.designsystem.theme.AuroraTealSecondary
-import com.example.coroutinesflows.designsystem.theme.AuroraTealSurface
-import com.example.coroutinesflows.designsystem.theme.AuroraTealTertiary
-import com.example.coroutinesflows.designsystem.theme.CyberVioletOnSurface
-import com.example.coroutinesflows.designsystem.theme.CyberVioletPrimary
-import com.example.coroutinesflows.designsystem.theme.CyberVioletSecondary
-import com.example.coroutinesflows.designsystem.theme.CyberVioletSurface
-import com.example.coroutinesflows.designsystem.theme.CyberVioletTertiary
-import com.example.coroutinesflows.designsystem.theme.EspressoGoldOnSurface
-import com.example.coroutinesflows.designsystem.theme.EspressoGoldPrimary
-import com.example.coroutinesflows.designsystem.theme.EspressoGoldSecondary
-import com.example.coroutinesflows.designsystem.theme.EspressoGoldSurface
-import com.example.coroutinesflows.designsystem.theme.EspressoGoldTertiary
-import com.example.coroutinesflows.designsystem.theme.NordicSapphireOnSurface
-import com.example.coroutinesflows.designsystem.theme.NordicSapphirePrimary
-import com.example.coroutinesflows.designsystem.theme.NordicSapphireSecondary
-import com.example.coroutinesflows.designsystem.theme.NordicSapphireSurface
-import com.example.coroutinesflows.designsystem.theme.NordicSapphireTertiary
-import com.example.coroutinesflows.designsystem.theme.SunsetCoralOnSurface
-import com.example.coroutinesflows.designsystem.theme.SunsetCoralPrimary
-import com.example.coroutinesflows.designsystem.theme.SunsetCoralSecondary
-import com.example.coroutinesflows.designsystem.theme.SunsetCoralSurface
-import com.example.coroutinesflows.designsystem.theme.SunsetCoralTertiary
-import com.example.coroutinesflows.designsystem.theme.TokyoCyanOnSurface
-import com.example.coroutinesflows.designsystem.theme.TokyoCyanPrimary
-import com.example.coroutinesflows.designsystem.theme.TokyoCyanSecondary
-import com.example.coroutinesflows.designsystem.theme.TokyoCyanSurface
-import com.example.coroutinesflows.designsystem.theme.TokyoCyanTertiary
+import com.example.designsystem.theme.AuroraTealOnSurface
+import com.example.designsystem.theme.AuroraTealPrimary
+import com.example.designsystem.theme.AuroraTealSecondary
+import com.example.designsystem.theme.AuroraTealSurface
+import com.example.designsystem.theme.AuroraTealTertiary
+import com.example.designsystem.theme.EspressoGoldOnSurface
+import com.example.designsystem.theme.EspressoGoldPrimary
+import com.example.designsystem.theme.EspressoGoldSecondary
+import com.example.designsystem.theme.EspressoGoldSurface
+import com.example.designsystem.theme.EspressoGoldTertiary
+import com.example.designsystem.theme.NordicSapphireOnSurface
+import com.example.designsystem.theme.NordicSapphirePrimary
+import com.example.designsystem.theme.NordicSapphireSecondary
+import com.example.designsystem.theme.NordicSapphireSurface
+import com.example.designsystem.theme.NordicSapphireTertiary
+import com.example.designsystem.theme.SunsetCoralOnSurface
+import com.example.designsystem.theme.SunsetCoralPrimary
+import com.example.designsystem.theme.SunsetCoralSecondary
+import com.example.designsystem.theme.SunsetCoralSurface
+import com.example.designsystem.theme.SunsetCoralTertiary
+import com.example.designsystem.theme.TokyoCyanOnSurface
+import com.example.designsystem.theme.TokyoCyanPrimary
+import com.example.designsystem.theme.TokyoCyanSecondary
+import com.example.designsystem.theme.TokyoCyanSurface
+import com.example.designsystem.theme.TokyoCyanTertiary
 import com.example.core.preferences.model.AppTheme
 import com.example.core.preferences.model.CornerShape
+import com.example.designsystem.theme.AuroraTealDarkOnSurface
+import com.example.designsystem.theme.AuroraTealDarkPrimary
+import com.example.designsystem.theme.AuroraTealDarkSecondary
+import com.example.designsystem.theme.AuroraTealDarkSurface
+import com.example.designsystem.theme.AuroraTealDarkTertiary
 import kotlinx.coroutines.launch
 
 
@@ -103,7 +103,7 @@ fun SettingsScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val selectedCornerStyle =  RoundedCornerShape(appState.cornerRadiusValue)
+    val selectedCornerStyle =  RoundedCornerShape(appState.cornerRadiusValue.dp)
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -448,14 +448,14 @@ fun SettingsScreen() {
                                                 Box(
                                                     modifier = Modifier
                                                         .size(38.dp, 22.dp)
-                                                        .clip(RoundedCornerShape(radius))
+                                                        .clip(RoundedCornerShape(radius.dp))
                                                         .background(
                                                             if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.25f) else Color.Transparent
                                                         )
                                                         .border(
                                                             width = 2.dp,
                                                             color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-                                                            shape = RoundedCornerShape(radius)
+                                                            shape = RoundedCornerShape(radius.dp)
                                                         ),
                                                     contentAlignment = Alignment.Center
                                                 ) {
@@ -696,12 +696,12 @@ val themeColors: Map<AppTheme, List<androidx.compose.ui.graphics.Color>> = mapOf
         NordicSapphireOnSurface
     ),
 
-    AppTheme.CYBER_VIOLET to listOf(
-        CyberVioletPrimary,
-        CyberVioletSecondary,
-        CyberVioletTertiary,
-        CyberVioletSurface,
-        CyberVioletOnSurface
+    AppTheme.AURORA_DARK to listOf(
+        AuroraTealDarkPrimary,
+        AuroraTealDarkSecondary,
+        AuroraTealDarkTertiary,
+        AuroraTealDarkSurface,
+        AuroraTealDarkOnSurface
     ),
 
     AppTheme.TOKYO_CYAN to listOf(

@@ -2,9 +2,9 @@ package com.example.featurelist.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.featurelist.ui.FeatureItem
-import com.example.featurelist.ui.SelectedCategory
-import com.example.featurelist.ui.navigableItems
+import com.example.featurelist.api.FeatureItem
+import com.example.featurelist.api.SelectedCategory
+import com.example.featurelist.api.navigableItems
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
